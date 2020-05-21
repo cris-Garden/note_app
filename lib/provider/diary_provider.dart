@@ -9,44 +9,21 @@ import 'package:flutter_app/util/file_util.dart';
 class DiaryProvider with ChangeNotifier {
 
 
+  bool didChange = false;
 
-  String fileName;
-
-  String title;
-
-  String context;
+  bool isEditing = false;
 
   Diary diary;
 
   int index = 1000;
 
-  File _file;
-
-  DiaryProvider(this.diary) {
-//    FileUtil util = FileUtil();
-//
-//    final list = util.appDocsDir.listSync();
-//    for(final a in list){
-//      print(a);
-//    }
-//    if(fileName == null){
-//      //新規
-//      print('time ${DateTime.now().millisecondsSinceEpoch}');
-//      _file = File(util.fileFromDocsDir('diary/${DateTime.now().millisecondsSinceEpoch}.txt'));
-//      _file.createSync(recursive: true);
-//      print(_file);
-//    }else{
-//      _file = File(util.fileFromDocsDir('diary/fileName.txt'));
-//    }
-//    diary = Diary(path:fileName);
-//    diary.textList = this.context.split(splitString);
-//    for (final a in diary.textList) {
-//      diary.objectList.add(null);
-//    }
-//    diary.textList.add('image');
-//
-//    diary.objectList.add(File(FileUtil().fileFromDocsDir('abcd.png')));
+  void changeEditing(){
+    didChange = true;
+    isEditing = !isEditing;
+    saveDiary();
   }
+
+  DiaryProvider(this.diary);
 
 
 
@@ -59,7 +36,7 @@ class DiaryProvider with ChangeNotifier {
           : index + 1;
       diary.textList.insert(insert, '');
     }
-
+    didChange = false;
     notifyListeners();
   }
 
@@ -89,6 +66,7 @@ class DiaryProvider with ChangeNotifier {
       }
 
       print(newFile);
+      didChange = false;
       notifyListeners();
     });
   }
@@ -96,8 +74,15 @@ class DiaryProvider with ChangeNotifier {
   void delete() {
     if (index == 1000) return;
     if (diary.textList.length == 0) return;
+    final text = diary.textList[index];
+    if(text.startsWith(Diary.imagePreString)){
+      final imageName = diary.textList[index].split('_').last;
+      final imagePath = FileUtil().fileFromDocsDir('image/${diary.fileName}/$imageName');
+      File(imagePath).delete();
+    }
     diary.textList.removeAt(index);
     index = 1000;
+    didChange = false;
     notifyListeners();
   }
 

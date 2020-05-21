@@ -5,6 +5,7 @@ import 'package:path/path.dart' as p;
 class Diary {
   static final splitString = '&%&!';
   static final imagePreString = '#%#!Image_';
+  static final titlePreString = '####_';
 
   Diary({this.path}) {
     print(path);
@@ -16,19 +17,25 @@ class Diary {
         int.parse(p.basenameWithoutExtension(path)));
 
 //    print('${createDateTime.year}年${createDateTime.month}月${createDateTime.day}日${createDateTime.hour}時${createDateTime.minute}分${createDateTime.microsecond}秒');
-    name =
+    createTimeString =
         '${createDateTime.year}年${createDateTime.month}月${createDateTime.day}日${createDateTime.hour}時${createDateTime.minute}分${createDateTime.microsecond}秒';
     dataString = file.readAsStringSync();
     final dataList = dataString.split(splitString);
     if(dataList.length == 1 && dataList[0]==''){
+      title = createTimeString;
       return;
+    }else{
+      title = dataList.first.split('_').last;
     }
-    textList.addAll(dataList);
+
+    textList.addAll(dataList..removeAt(0));
   }
 
   String path;
 
-  String name;
+  String title;
+
+  String createTimeString;
 
   String fileName;
 
@@ -44,7 +51,7 @@ class Diary {
   List<String> textList = [];
 
   void save() {
-    dataString = '';
+    dataString = '$titlePreString$title';
     for (int i = 0; i < textList.length; i++) {
       if (i == textList.length - 1) {
         dataString = dataString + textList[i];

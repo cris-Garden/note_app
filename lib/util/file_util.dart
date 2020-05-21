@@ -21,6 +21,7 @@ class FileUtil {
   List<String> get diaryFiles{
     final diaryPath = fileFromDocsDir('diary');
     final  diaryDirectory = Directory(diaryPath);
+    diaryDirectory.createSync(recursive: true);
     final subFiles = diaryDirectory.listSync();
     return List.generate(subFiles.length, (index){
       return subFiles[index].path.endsWith('.txt')?subFiles[index].path:null;
