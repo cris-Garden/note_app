@@ -1,13 +1,9 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/diary.dart';
 import 'package:flutter_app/util/file_util.dart';
 
-
-
 class DiaryProvider with ChangeNotifier {
-
 
   bool didChange = false;
 
@@ -17,6 +13,11 @@ class DiaryProvider with ChangeNotifier {
 
   int index = 1000;
 
+  void doChange (){
+    didChange = true;
+    notifyListeners();
+  }
+
   void changeEditing(){
     didChange = true;
     isEditing = !isEditing;
@@ -24,8 +25,6 @@ class DiaryProvider with ChangeNotifier {
   }
 
   DiaryProvider(this.diary);
-
-
 
   void addText() {
     if (index == 1000) {

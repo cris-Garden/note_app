@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/page/home_page.dart';
+import 'package:flutter_app/provider/home_page_provider.dart';
 import 'package:flutter_app/util/file_util.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -17,14 +18,24 @@ class MyApp extends StatelessWidget {
   final RouteObserver<PageRoute> routeObserver = new RouteObserver<PageRoute>();
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData.dark().copyWith(
-          textTheme: TextTheme(
-        button: TextStyle(
-          fontSize: 18,
-        ),
-      )),
-      home: HomePage(),
+    return ChangeNotifierProvider<HomePageProvider>(
+      create: (_) => HomePageProvider(),
+      builder: (context, _) {
+        return MaterialApp(
+          theme: ThemeData.dark().copyWith(
+            textTheme: TextTheme(
+              headline1: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.w600,
+              ),
+              button: TextStyle(
+                fontSize: 18,
+              ),
+            ),
+          ),
+          home: HomePage(),
+        );
+      },
     );
   }
 }
