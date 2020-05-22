@@ -28,6 +28,14 @@ class MyApp extends StatelessWidget {
                 fontSize: 25,
                 fontWeight: FontWeight.w600,
               ),
+              headline2: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+              ),
+              bodyText1: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w300,
+              ),
               button: TextStyle(
                 fontSize: 18,
               ),

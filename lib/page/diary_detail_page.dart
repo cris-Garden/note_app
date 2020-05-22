@@ -45,10 +45,42 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                   maxLines: 1,
                   onChanged: (value){
                     diary.title = value;
+                  },
+                  onEditingComplete: (){
                     homePageProvider.didChange();
                   },
                 ),
                 actions: <Widget>[
+                  Container(
+                    padding: EdgeInsets.all(15),
+                    child: GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (_) {
+                              return AlertDialog(
+                                title: Text("提示"),
+                                content: Text("この日記を削除しますか"),
+                                actions: <Widget>[
+                                  // ボタン領域
+                                  FlatButton(
+                                    child: Text("Cancel"),
+                                    onPressed: () => Navigator.pop(context),
+                                  ),
+                                  FlatButton(
+                                    child: Text("OK"),
+                                    onPressed: () => Navigator.pop(context),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: Text(
+                          '削除',
+                          style: Theme.of(context).textTheme.button,
+                        )),
+                  ),
                   Container(
                     padding: EdgeInsets.all(15),
                     child: GestureDetector(
@@ -126,6 +158,9 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                                 .startsWith(Diary.imagePreString)) {
                               return GestureDetector(
                                 child: Container(
+                                  decoration:item == provider.index ? BoxDecoration(
+                                    border: Border.all(color: Colors.blue, width: 1.5), // 边色与边宽度
+                                  ):null,
                                   padding: EdgeInsets.only(
                                       left: 8, right: 8, top: 8, bottom: 8),
                                   width: double.infinity,
@@ -136,13 +171,19 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                                   ),
                                 ),
                                 onTap: () {
-                                  provider.index = item;
+                                  if(!provider.isEditing){
+                                    return;
+                                  }
+                                  provider.setIndex(item);
                                   FocusScope.of(context)
                                       .requestFocus(FocusNode());
                                 },
                               );
                             }
                             return Container(
+                              decoration:item == provider.index ? BoxDecoration(
+                                border: Border.all(color: Colors.blue, width: 1.5), // 边色与边宽度
+                              ):null,
                               padding: EdgeInsets.only(
                                   left: 8, top: 8, right: 8, bottom: 8),
                               child: TextField(
@@ -155,11 +196,11 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                                   provider.saveText(value, item);
                                 },
                                 onSubmitted: (value) {
-                                  provider.index = 1000;
+                                  provider.setIndex(1000);
                                 },
                                 onTap: () {
                                   print(item);
-                                  provider.index = item;
+                                  provider.setIndex(item);
                                 },
                               ),
                             );

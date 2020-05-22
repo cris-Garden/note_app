@@ -4,14 +4,17 @@ import 'package:flutter_app/util/file_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/diary.dart';
 
-
 class TitleCell extends StatelessWidget {
   TitleCell(
     this.diary, {
     this.onTap,
+    this.showTopLine = false,
+    this.showBottomLine = true,
   });
   final VoidCallback onTap;
   final Diary diary;
+  final bool showTopLine;
+  final bool showBottomLine;
   @override
   Widget build(BuildContext context) {
     String title;
@@ -23,6 +26,7 @@ class TitleCell extends StatelessWidget {
         title = title == null ? a : title;
       }
     }
+    bool hasTitle = title != null && title.length != 0;
 
     return GestureDetector(
       onTap: onTap,
@@ -30,19 +34,55 @@ class TitleCell extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(diary.title),
-          title != null ? Text(title) : null,
-          images.length > 0
-              ? GridView.count(
-            shrinkWrap: false,
-                  crossAxisCount: 4,
-                  children: List.generate([images.length,4].reduce(min), (index) {
-                    final imageName = images[index].split('_').last;
-                    final imagePath = FileUtil().fileFromDocsDir('image/${diary.fileName}/$imageName');
-                    return Image.file(File(imagePath));
-                  }),
+          showTopLine?Divider(
+            height: 2,
+            indent: 8,
+            color: Colors.grey,
+          ):null,
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(8),
+            child: Text(
+              diary.title,
+              style: Theme.of(context).textTheme.headline2,
+              textAlign: TextAlign.left,
+            ),
+          ),
+          hasTitle
+              ? Container(
+                  padding: EdgeInsets.all(8),
+                  child: Text(
+                    title,
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
                 )
               : null,
+          images.length > 0
+              ? Container(
+                  padding: const EdgeInsets.all(8),
+                  height: 90,
+                  child: GridView.count(
+                    //滚动方向
+                    scrollDirection: Axis.vertical,
+                    crossAxisCount: 4,
+                    crossAxisSpacing: 10,
+                    children:
+                        List.generate([images.length, 4].reduce(min), (index) {
+                      final imageName = images[index].split('_').last;
+                      final imagePath = FileUtil().fileFromDocsDir(
+                          'image/${diary.fileName}/$imageName');
+                      return Image.file(
+                        File(imagePath),
+                        fit: BoxFit.cover,
+                      );
+                    }),
+                  ))
+              : null,
+          showBottomLine?Divider(
+            height: 2,
+            indent: 8,
+            color: Colors.grey,
+          ):null,
         ]..removeWhere((element) => element == null),
       ),
     );

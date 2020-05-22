@@ -13,6 +13,11 @@ class DiaryProvider with ChangeNotifier {
 
   int index = 1000;
 
+  void setIndex(int newIndex){
+    index = newIndex;
+    doChange();
+  }
+
   void doChange (){
     didChange = true;
     notifyListeners();
