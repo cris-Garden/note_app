@@ -1,0 +1,31 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by chris on 2020/05/24.
+ 
+  
+*/
+// app 的简体中文名字
+CFBundleDisplayName = "简体";
+
+//NSBluetoothPeripheralUsageDescription = "是否允许此App使用蓝牙";
+
+//NSCalendarsUsageDescription = "是否允许此App使用日历？";
+
+NSCameraUsageDescription = "是否允许此App使用相机？";
+
+//NSContactsUsageDescription = "是否允许此App访问你的通讯录？";
+
+//NSFaceIDUsageDescription = "是否允许此App使用你的Face ID？";
+
+//NSLocationAlwaysUsageDescription = "我们需要通过您的地理位置信息获取您周边的相关数据";
+
+//NSLocationWhenInUseUsageDescription = "我们需要通过您的地理位置信息获取您周边的相关数据";
+
+NSMicrophoneUsageDescription = "是否允许此App使用你的麦克风？";
+
+NSPhotoLibraryUsageDescription = "是否允许此App访问你的相册？";
+
+//NSSpeechRecognitionUsageDescription = "是否允许此App使用语音识别";
+
