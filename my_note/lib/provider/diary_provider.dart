@@ -109,6 +109,10 @@ class DiaryProvider with ChangeNotifier {
     });
   }
 
+  void deleteDiary(){
+    diary.delete();
+  }
+
   void delete() {
     if (index == 1000) return;
     if (diary.textList.length == 0) return;

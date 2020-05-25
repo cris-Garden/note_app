@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:my_note/util/file_util.dart';
 import 'package:path/path.dart' as p;
 
 class Diary {
@@ -61,5 +62,15 @@ class Diary {
       }
     }
     file.writeAsStringSync(dataString, flush: true);
+  }
+
+  void delete(){
+    //delete txt
+    file.deleteSync();
+    //delete Image
+    final imagePath =
+    FileUtil().fileFromDocsDir('image/$fileName');
+    Directory(imagePath)..deleteSync(recursive: true);
+
   }
 }

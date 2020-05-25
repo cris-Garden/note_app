@@ -71,7 +71,14 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                                   ),
                                   FlatButton(
                                     child: Text("OK"),
-                                    onPressed: () => Navigator.pop(context),
+                                    onPressed: () {
+                                      provider.deleteDiary();
+                                      homePageProvider.diarys.remove(diary);
+                                      homePageProvider.didChange();
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+
+                                    }
                                   ),
                                 ],
                               );

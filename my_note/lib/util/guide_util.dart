@@ -14,7 +14,7 @@ class GuideUtil {
 
   Future<void> init() async {
     final isInit = await UserDefaults().getBoolData('guide_init');
-    if (isInit == null) {
+    if (isInit == null || isInit == false) {
       print('not init');
 
       //get diary data
@@ -27,6 +27,7 @@ class GuideUtil {
       await fileUti.writeImage('guide1.png', '1590365233267', guide1);
       await fileUti.writeImage('guide2.png', '1590365233267', guide2);
       await fileUti.writeDiary('1590365233267.txt', diaryData);
+      UserDefaults().saveBoolData('guide_init', true);
     }
   }
 }
