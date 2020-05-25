@@ -23,11 +23,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string></string>
+	<string>是否允许此App使用相机？</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string></string>
+	<string>是否允许此App使用你的麦克风？</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string></string>
+	<string>是否允许此App访问你的相册？</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
