@@ -7,7 +7,7 @@
 */
 
 // app 的日语
-CFBundleDisplayName = "日記";
+CFBundleDisplayName = "一生足迹";
 
 //NSBluetoothPeripheralUsageDescription = "是否允许此App使用蓝牙";
 

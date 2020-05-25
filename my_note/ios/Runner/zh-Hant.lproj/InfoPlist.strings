@@ -7,7 +7,7 @@
   
 */
 // app 的简体中文名字
-CFBundleDisplayName = "简体";
+CFBundleDisplayName = "一生足迹";
 
 //NSBluetoothPeripheralUsageDescription = "是否允许此App使用蓝牙";
 
