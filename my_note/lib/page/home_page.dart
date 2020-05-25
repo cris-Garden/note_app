@@ -8,6 +8,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Selector<HomePageProvider, HomePageProvider>(
+      shouldRebuild: (pre,next){
+        return pre.changeFlag;
+      },
       builder: (context, provider, _) {
         return SafeArea(
           child: Scaffold(
@@ -69,3 +72,5 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+
+

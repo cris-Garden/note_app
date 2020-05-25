@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
 
 class FileUtil {
@@ -28,4 +29,24 @@ class FileUtil {
     })..removeWhere((element) => element==null);
   }
 
+  //
+  Future<void> writeImage(String name, String diaryFileName,ByteData data) async {
+    
+    List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    final imagePath =
+    FileUtil().fileFromDocsDir('image/$diaryFileName/$name');
+    final file = File(imagePath);
+    if(file.existsSync()) return;
+    final newFile  = await file.create(recursive: true);
+    await newFile.writeAsBytes(bytes);
+  }
+
+  Future<void> writeDiary(String diaryName,String diaryData) async
+  {
+    final diaryPath = FileUtil().fileFromDocsDir('diary/$diaryName');
+    final file = File(diaryPath);
+    if(file.existsSync()) return;
+    final newFile  = await file.create(recursive: true);
+    await newFile.writeAsString(diaryData);
+  }
 }

@@ -54,6 +54,7 @@ class TitleCell extends StatelessWidget {
                   child: Text(
                     title,
                     style: Theme.of(context).textTheme.bodyText1,
+                    maxLines: 8,
                   ),
                 )
               : null,
