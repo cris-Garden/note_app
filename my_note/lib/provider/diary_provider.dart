@@ -109,8 +109,8 @@ class DiaryProvider with ChangeNotifier {
     });
   }
 
-  void deleteDiary(){
-    diary.delete();
+  Future<void> deleteDiary() async{
+    await diary.delete();
   }
 
   void delete() {

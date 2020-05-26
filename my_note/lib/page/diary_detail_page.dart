@@ -62,7 +62,7 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                             builder: (_) {
                               return AlertDialog(
                                 title: Text("提示"),
-                                content: Text("この日記を削除しますか"),
+                                content: Text("是否删除该日记？"),
                                 actions: <Widget>[
                                   // ボタン領域
                                   FlatButton(
@@ -72,12 +72,12 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                                   FlatButton(
                                     child: Text("OK"),
                                     onPressed: () {
-                                      provider.deleteDiary();
-                                      homePageProvider.diarys.remove(diary);
-                                      homePageProvider.didChange();
-                                      Navigator.pop(context);
-                                      Navigator.pop(context);
-
+                                      provider.deleteDiary().then((value) {
+                                        homePageProvider.diarys.remove(diary);
+                                        homePageProvider.didChange();
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      });
                                     }
                                   ),
                                 ],
@@ -170,7 +170,7 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                                     builder: (_) {
                                       return AlertDialog(
                                         title: Text("提示"),
-                                        content: Text("選んだ内容を削除しますか？"),
+                                        content: Text("是否删除选中的图片或文本？"),
                                         actions: <Widget>[
                                           // ボタン領域
                                           FlatButton(

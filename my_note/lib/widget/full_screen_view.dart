@@ -36,7 +36,7 @@ class _DetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(title: Text('图片'),),
       body: GestureDetector(
         child: Center(
           child: Hero(

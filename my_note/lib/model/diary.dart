@@ -64,13 +64,19 @@ class Diary {
     file.writeAsStringSync(dataString, flush: true);
   }
 
-  void delete(){
+  Future<void> delete() async{
     //delete txt
-    file.deleteSync();
+    await file.delete();
     //delete Image
     final imagePath =
     FileUtil().fileFromDocsDir('image/$fileName');
-    Directory(imagePath)..deleteSync(recursive: true);
+    final imageDirectory = Directory(imagePath);
+    final  hasDirectory = await imageDirectory.exists();
+    if(hasDirectory){
+      await imageDirectory.delete(recursive: true);
+    }
+
+
 
   }
 }
