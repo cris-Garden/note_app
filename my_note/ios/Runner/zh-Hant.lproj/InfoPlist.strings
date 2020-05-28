@@ -13,7 +13,7 @@ CFBundleDisplayName = "一生足迹";
 
 //NSCalendarsUsageDescription = "是否允许此App使用日历？";
 
-NSCameraUsageDescription = "是否允许此App使用相机？";
+NSCameraUsageDescription = "如果不允许将不能使用插入图片功能。";
 
 //NSContactsUsageDescription = "是否允许此App访问你的通讯录？";
 
@@ -25,7 +25,7 @@ NSCameraUsageDescription = "是否允许此App使用相机？";
 
 NSMicrophoneUsageDescription = "是否允许此App使用你的麦克风？";
 
-NSPhotoLibraryUsageDescription = "是否允许此App访问你的相册？";
+NSPhotoLibraryUsageDescription = "如果不允许将不能使用插入图片功能。";
 
 //NSSpeechRecognitionUsageDescription = "是否允许此App使用语音识别";
 
