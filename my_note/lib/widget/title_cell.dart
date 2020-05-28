@@ -23,8 +23,8 @@ class TitleCell extends StatelessWidget {
     for (final section in diary.sections) {
       if (section.type == SectionType.image) {
         images.add(section.imagePath);
-      } else {
-        title = title == null ? diary.title : title;
+      } else if (section.type == SectionType.text){
+        title = title == null ? section.text : title;
       }
     }
     bool hasTitle = title != null && title.length != 0;

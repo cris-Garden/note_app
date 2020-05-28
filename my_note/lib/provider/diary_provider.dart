@@ -84,15 +84,15 @@ class DiaryProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addImage(File image, {Function didSave}) {
+  void addImage(File image, {Function didSave}) async {
     if (image == null) return;
 
     final imageName = '${DateTime.now().millisecondsSinceEpoch}.png';
     final imagePath =
         FileUtil().fileFromDocsDir('image/${diary.fileName}/$imageName');
-    File(imagePath).createSync(recursive: true);
+    await File(imagePath).create(recursive: true);
     image.copy(imagePath).then((newFile) {
-      final addImageSection = Section(imagePath:imagePath,type: SectionType.image);
+      final addImageSection = Section(imagePath:imageName,type: SectionType.image);
       if (index == 1000) {
         diary.sections.add(addImageSection);
       } else {

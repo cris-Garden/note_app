@@ -119,6 +119,7 @@ class Section {
 }
 
 enum SectionType {
+  firstTitle,
   title,
   text,
   image,

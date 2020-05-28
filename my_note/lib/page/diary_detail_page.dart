@@ -73,7 +73,7 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                   textAlign: TextAlign.center,
                   maxLines: 1,
                   onChanged: (value) {
-                    diary.title = value;
+                    diary.setTitle(value);
                   },
                   onEditingComplete: () {
                     diary.save();
@@ -290,6 +290,9 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                                         fit: BoxFit.cover,
                                       ),
                                     );
+                            }
+                            if (provider.diary.sections[item].type == SectionType.firstTitle){
+                              return Container();
                             }
                             return Container(
                               decoration: item == provider.index

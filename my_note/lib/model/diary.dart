@@ -23,49 +23,53 @@ class Diary {
         '${createDateTime.year}年${createDateTime.month}月${createDateTime.day}日';
     final dataString = file.readAsStringSync();
     final dataList = dataString.split(splitString);
-    if(dataList.length == 1 && dataList[0]==''){
+    if (dataList.length == 1 && dataList[0] == '') {
       //新規の時、ディフォルトファイルタイトル
-      title = '見出し';
+      sections = [Section(title: '标题', type: SectionType.firstTitle)];
       return;
-    }else{
-      title = dataList.first.split('_').last;
     }
 
     //老版本解析适配
-    if(dataString.startsWith(titlePreString)){
-      for(final data in dataList) {
+    if (dataString.startsWith(titlePreString)) {
+      for (final data in dataList) {
         //原title
-        if(data.startsWith(titlePreString)){
-          sections.add(Section(title:data.split('_').last,type: SectionType.title));
+        if (data.startsWith(titlePreString)) {
+          sections.add(Section(
+              title: data.split('_').last, type: SectionType.firstTitle));
           continue;
         }
         //原图片
-        if(data.startsWith(imagePreString)){
-          sections.add(Section(imagePath:data.split('_').last,type: SectionType.image));
+        if (data.startsWith(imagePreString)) {
+          sections.add(Section(
+              imagePath: data.split('_').last, type: SectionType.image));
           continue;
         }
         //原文本
-        sections.add(Section(text:data,type: SectionType.text));
+        sections.add(Section(text: data, type: SectionType.text));
       }
-    }else{
+    } else {
       //新版本解析适配
       final mapsList = jsonDecode(dataString) as List;
-      print(mapsList);
-      sections = List.generate(mapsList.length, (index){
-        final map  = mapsList[index] as Map;
+      sections = List.generate(mapsList.length, (index) {
+        final map = mapsList[index] as Map;
         return Section.from(map);
       });
       print(sections);
-
     }
-
   }
 
   List<Section> sections = [];
 
   String path;
 
-  String title;
+  String get title {
+    for (final section in sections) {
+      if (section.type == SectionType.firstTitle) {
+        return section.title;
+      }
+    }
+    return '';
+  }
 
   String createTimeString;
 
@@ -78,22 +82,25 @@ class Diary {
 
   DateTime updateTime;
 
-  void save() {
-
-     final dataString = jsonEncode(sections);
-     print('dataString:$dataString');
-     file.writeAsStringSync(dataString, flush: true);
+  void setTitle(String title) {
+    final section =
+        sections.where((element) => element.type == SectionType.firstTitle) as Section;
+    section.title = title;
   }
 
-  Future<void> delete() async{
+  void save() {
+    final dataString = jsonEncode(sections);
+    file.writeAsStringSync(dataString, flush: true);
+  }
+
+  Future<void> delete() async {
     //delete txt
     await file.delete();
     //delete Image
-    final imagePath =
-    FileUtil().fileFromDocsDir('image/$fileName');
+    final imagePath = FileUtil().fileFromDocsDir('image/$fileName');
     final imageDirectory = Directory(imagePath);
-    final  hasDirectory = await imageDirectory.exists();
-    if(hasDirectory){
+    final hasDirectory = await imageDirectory.exists();
+    if (hasDirectory) {
       await imageDirectory.delete(recursive: true);
     }
   }

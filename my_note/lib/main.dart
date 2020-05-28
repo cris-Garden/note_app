@@ -29,7 +29,29 @@ class MyApp extends StatelessWidget {
       create: (_) => HomePageProvider(),
       builder: (context, _) {
         return MaterialApp(
-          theme: ThemeData.dark().copyWith(
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ).copyWith(
+            textTheme: TextTheme(
+              headline1: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.w600,
+              ),
+              headline2: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+              ),
+              bodyText1: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w300,
+              ),
+              button: TextStyle(
+                fontSize: 18,
+              ),
+            ),
+          ),
+          darkTheme:ThemeData.dark().copyWith(
             textTheme: TextTheme(
               headline1: TextStyle(
                 fontSize: 25,
