@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:my_note/model/diary.dart';
+import 'package:my_note/model/section.dart';
 import 'package:my_note/util/file_util.dart';
 
 class TitleCell extends StatelessWidget {
@@ -19,11 +20,11 @@ class TitleCell extends StatelessWidget {
   Widget build(BuildContext context) {
     String title;
     List<String> images = [];
-    for (final a in diary.textList) {
-      if (a.startsWith(Diary.imagePreString)) {
-        images.add(a);
+    for (final section in diary.sections) {
+      if (section.type == SectionType.image) {
+        images.add(section.imagePath);
       } else {
-        title = title == null ? a : title;
+        title = title == null ? diary.title : title;
       }
     }
     bool hasTitle = title != null && title.length != 0;

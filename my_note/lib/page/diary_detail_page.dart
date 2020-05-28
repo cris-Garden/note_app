@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_note/model/diary.dart';
+import 'package:my_note/model/section.dart';
 import 'package:my_note/provider/diary_provider.dart';
 import 'package:my_note/provider/home_page_provider.dart';
 import 'package:my_note/widget/full_screen_view.dart';
@@ -11,6 +12,33 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
   DiaryDetailPage(this.diary);
 
   final Diary diary;
+
+  //截取长屏
+//  GlobalKey rootWidgetKey = GlobalKey();
+//
+//  Future<Uint8List> _capturePng() async {
+//    try {
+//      RenderRepaintBoundary boundary =
+//      rootWidgetKey.currentContext.findRenderObject();
+//      var image = await boundary.toImage(pixelRatio: 3.0);
+//      ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
+//      Uint8List pngBytes = byteData.buffer.asUint8List();
+//      return pngBytes;//这个对象就是图片数据
+//    } catch (e) {
+//      print(e);
+//    }
+//    return null;
+//  }
+
+//  RepaintBoundary(
+//  key: rootWidgetKey,
+//  child:
+////            Column(
+////              mainAxisAlignment: MainAxisAlignment.center,
+////              children: <Widget>[
+////              ],
+////            ),
+//  ),
 
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -197,13 +225,13 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                         )
                       : Container(),
                   Selector<DiaryProvider, int>(
-                    selector: (_, provider) => provider.diary.textList.length,
+                    selector: (_, provider) => provider.diary.sections.length,
                     builder: (context, count, child) {
                       return Expanded(
                         child: ListView.builder(
                           itemBuilder: (context, item) {
-                            if (provider.diary.textList[item]
-                                .startsWith(Diary.imagePreString)) {
+                            if (provider.diary.sections[item]
+                                .type == SectionType.image) {
                               return provider.isEditing
                                   ? GestureDetector(
                                       child: Container(
@@ -222,7 +250,7 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                                         width: double.infinity,
                                         height: 250,
                                         child: Image.file(
-                                          File(provider.imagePath(item)),
+                                          File(provider.imagePath(provider.diary.sections[item].imagePath)),
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -253,12 +281,12 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                                         width: double.infinity,
                                         height: 250,
                                         child: Image.file(
-                                          File(provider.imagePath(item)),
+                                          File(provider.imagePath(provider.diary.sections[item].imagePath)),
                                           fit: BoxFit.fitWidth,
                                         ),
                                       ),
                                       fullChild: Image.file(
-                                        File(provider.imagePath(item)),
+                                        File(provider.imagePath(provider.diary.sections[item].imagePath)),
                                         fit: BoxFit.cover,
                                       ),
                                     );
@@ -277,7 +305,7 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                                 autofocus: item == provider.index,
                                 enabled: provider.isEditing,
                                 controller: TextEditingController(
-                                    text: provider.diary.textList[item]),
+                                    text: provider.diary.sections[item].text),
                                 decoration: provider.isEditing
                                     ? InputDecoration(hintText: "输入你想要记录的内容...")
                                     : null,

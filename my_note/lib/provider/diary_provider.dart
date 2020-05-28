@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:my_note/model/diary.dart';
+import 'package:my_note/model/section.dart';
 import 'package:my_note/util/file_util.dart';
 
 class DiaryProvider with ChangeNotifier {
@@ -31,14 +32,15 @@ class DiaryProvider with ChangeNotifier {
   DiaryProvider(this.diary);
 
   void addText() {
+    final addSection = Section(text:'',type: SectionType.text);
     if (index == 1000) {
-      diary.textList.add('');
-      index = diary.textList.length - 1;
+      diary.sections.add(addSection);
+      index = diary.sections.length - 1;
     } else {
-      int insert = index + 1 > diary.textList.length
-          ? (diary.textList.length - 1 > 0 ? diary.textList.length - 1 : 0)
+      int insert = index + 1 > diary.sections.length
+          ? (diary.sections.length - 1 > 0 ? diary.sections.length - 1 : 0)
           : index + 1;
-      diary.textList.insert(insert, '');
+      diary.sections.insert(insert, addSection);
       index = index + 1;
     }
     didChange = false;
@@ -46,7 +48,7 @@ class DiaryProvider with ChangeNotifier {
   }
 
   void saveText(String text, int index) {
-    diary.textList[index] = text;
+    diary.sections[index].text = text;
     diary.save();
   }
 
@@ -59,9 +61,9 @@ class DiaryProvider with ChangeNotifier {
     if (index == 0 || index == 1000) {
       return;
     }
-    final a = diary.textList[index];
-    diary.textList[index] = diary.textList[index - 1];
-    diary.textList[index - 1] = a;
+    final a = diary.sections[index];
+    diary.sections[index] = diary.sections[index - 1];
+    diary.sections[index - 1] = a;
     diary.save();
     index = index - 1;
     didChange = true;
@@ -70,12 +72,12 @@ class DiaryProvider with ChangeNotifier {
 
   void down() {
     print(index);
-    if (index == diary.textList.length - 1 || index == 1000) {
+    if (index == diary.sections.length - 1 || index == 1000) {
       return;
     }
-    final a = diary.textList[index];
-    diary.textList[index] = diary.textList[index + 1];
-    diary.textList[index + 1] = a;
+    final a = diary.sections[index];
+    diary.sections[index] = diary.sections[index + 1];
+    diary.sections[index + 1] = a;
     diary.save();
     index = index + 1;
     didChange = true;
@@ -90,13 +92,14 @@ class DiaryProvider with ChangeNotifier {
         FileUtil().fileFromDocsDir('image/${diary.fileName}/$imageName');
     File(imagePath).createSync(recursive: true);
     image.copy(imagePath).then((newFile) {
+      final addImageSection = Section(imagePath:imagePath,type: SectionType.image);
       if (index == 1000) {
-        diary.textList.add('${Diary.imagePreString}$imageName');
+        diary.sections.add(addImageSection);
       } else {
-        int insert = index + 1 > diary.textList.length
-            ? (diary.textList.length - 1 > 0 ? diary.textList.length - 1 : 0)
+        int insert = index + 1 > diary.sections.length
+            ? (diary.sections.length - 1 > 0 ? diary.sections.length - 1 : 0)
             : index + 1;
-        diary.textList.insert(insert, '${Diary.imagePreString}$imageName');
+        diary.sections.insert(insert, addImageSection);
       }
 
       print(newFile);
@@ -115,24 +118,23 @@ class DiaryProvider with ChangeNotifier {
 
   void delete() {
     if (index == 1000) return;
-    if (diary.textList.length == 0) return;
-    final text = diary.textList[index];
-    if (text.startsWith(Diary.imagePreString)) {
-      final imageName = diary.textList[index].split('_').last;
+    if (diary.sections.length == 0) return;
+    final section = diary.sections[index];
+    if (section.type == SectionType.image) {
+      final imageName = section.imagePath;
       final imagePath =
           FileUtil().fileFromDocsDir('image/${diary.fileName}/$imageName');
       File(imagePath).delete();
     }
-    diary.textList.removeAt(index);
+    diary.sections.removeAt(index);
     index = 1000;
     didChange = false;
     notifyListeners();
   }
 
-  String imagePath(int index) {
-    final imageName = diary.textList[index].split('_').last;
+  String imagePath(String path) {
     final imagePath =
-        FileUtil().fileFromDocsDir('image/${diary.fileName}/$imageName');
+        FileUtil().fileFromDocsDir('image/${diary.fileName}/$path');
     return imagePath;
   }
 }
