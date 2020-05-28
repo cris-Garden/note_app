@@ -30,24 +30,28 @@ class MyApp extends StatelessWidget {
       builder: (context, _) {
         return MaterialApp(
           theme: ThemeData(
-            primarySwatch: Colors.blue,
+            primarySwatch: Colors.blueGrey,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ).copyWith(
             textTheme: TextTheme(
               headline1: TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.w600,
+                color: Colors.black
               ),
               headline2: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
+                fontSize: 21,
+                fontWeight: FontWeight.w700,
+                color: Colors.black
               ),
               bodyText1: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w300,
+                height: 1.4,
+                fontSize: 15,
+                fontWeight: FontWeight.w400,
+                color: Colors.black
               ),
               button: TextStyle(
-                fontSize: 18,
+                fontSize: 15,
               ),
             ),
           ),
@@ -58,12 +62,13 @@ class MyApp extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
               headline2: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w900,
+                fontSize: 21,
+                fontWeight: FontWeight.w700,
               ),
               bodyText1: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w300,
+                height: 1.4,
+                fontSize: 15,
+                fontWeight: FontWeight.w400,
               ),
               button: TextStyle(
                 fontSize: 18,

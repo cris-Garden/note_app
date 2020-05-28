@@ -1,10 +1,33 @@
+import 'dart:typed_data';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:image_pickers/image_pickers.dart';
 import 'package:my_note/page/diary_detail_page.dart';
 import 'package:my_note/provider/home_page_provider.dart';
 import 'package:my_note/widget/title_cell.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
+
+  //截取长屏
+  GlobalKey rootWidgetKey = GlobalKey();
+
+  Future<void> _capturePng() async {
+    try {
+      RenderRepaintBoundary boundary =
+      rootWidgetKey.currentContext.findRenderObject();
+      var image = await boundary.toImage(pixelRatio: 3.0);
+      ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
+      Uint8List pngBytes = byteData.buffer.asUint8List();
+      String dataImagePath = await ImagePickers.saveByteDataImageToGallery(pngBytes,);
+    } catch (e) {
+      print(e);
+    }
+    return;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Selector<HomePageProvider, HomePageProvider>(
@@ -19,6 +42,18 @@ class HomePage extends StatelessWidget {
                   '日記',
                   style: Theme.of(context).textTheme.headline1,
                 ),
+                actions: <Widget>[
+                  Container(
+                    padding: EdgeInsets.only(left: 5,top: 15,bottom: 15,right: 5),
+                    child: GestureDetector(
+                        onTap: () {
+                          //截取长屏
+                          _capturePng();
+                        },
+                        child: Icon(Icons.file_download),
+                        ),
+                  ),
+                ],
               ),
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
@@ -39,30 +74,34 @@ class HomePage extends StatelessWidget {
                       final kes = provider.diaryTimeMap.keys.toList();
                       final title = kes[index];
                       final diarys = provider.diaryTimeMap[title];
-                      return Column(
-                        children: List.generate(
-                          diarys.length,
-                          (index_d) {
-                            return TitleCell(
-                              diarys[index_d],
-                              showTopLine: false,
-                              showBottomLine: false,
-                              onTap: () {
-                                Navigator.of(context)
-                                    .push(MaterialPageRoute(builder: (context) {
-                                  return DiaryDetailPage(diarys[index_d]);
-                                }));
-                              },
-                            );
-                          },
-                        )..insert(
-                            0,
-                             Container(
-                               margin: EdgeInsets.only(top: 16,left: 16),
-                               width: double.infinity,
-                                child: Text(title),
+                      return RepaintBoundary(
+                          key: rootWidgetKey,
+                          child:Container(
+                            color: Theme.of(context).primaryColor,
+                            child: Column(
+                              children: List.generate(
+                                diarys.length,
+                                    (index_d) {
+                                  return TitleCell(
+                                    diarys[index_d],
+                                    onTap: () {
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(builder: (context) {
+                                        return DiaryDetailPage(diarys[index_d]);
+                                      }));
+                                    },
+                                  );
+                                },
+                              )..insert(
+                                0,
+                                Container(
+                                  margin: EdgeInsets.only(top: 16,left: 16),
+                                  width: double.infinity,
+                                  child: Text(title,style: Theme.of(context).textTheme.bodyText1,),
+                                ),
                               ),
-                          ),
+                            ),
+                          )
                       );
                     },
                     itemCount: provider.diaryTimeMap.keys.length,

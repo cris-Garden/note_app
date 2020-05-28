@@ -27,6 +27,7 @@ dependencies:
   provider: ^4.1.2
 
   image_picker: ^0.6.6+4
+  image_pickers: ^1.0.7+3
 
   path_provider: ^1.6.8
 
@@ -58,6 +59,7 @@ flutter:
   assets:
     - assets/images/guide1.png
     - assets/images/guide2.png
+    - assets/images/default.jpg
     - assets/1590365233267.txt
 
   # An image asset can refer to one or more resolution-specific "variants", see

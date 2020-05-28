@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_note/model/diary.dart';
 import 'package:my_note/model/section.dart';
@@ -33,11 +34,6 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
 //  RepaintBoundary(
 //  key: rootWidgetKey,
 //  child:
-////            Column(
-////              mainAxisAlignment: MainAxisAlignment.center,
-////              children: <Widget>[
-////              ],
-////            ),
 //  ),
 
   Future getImage() async {
@@ -82,7 +78,7 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                 ),
                 actions: <Widget>[
                   Container(
-                    padding: EdgeInsets.all(15),
+                    padding: EdgeInsets.only(top: 15,bottom: 15,left: 5,right: 5),
                     child: GestureDetector(
                         onTap: () {
                           showDialog(
@@ -116,10 +112,11 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                         child: Text(
                           '删除',
                           style: Theme.of(context).textTheme.button,
+                          textAlign: TextAlign.center,
                         )),
                   ),
                   Container(
-                    padding: EdgeInsets.all(15),
+                    padding: EdgeInsets.only(left: 5,top: 15,bottom: 15,right: 5),
                     child: GestureDetector(
                         onTap: () {
                           if (provider.isEditing == true) {
@@ -234,7 +231,17 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                                 .type == SectionType.image) {
                               return provider.isEditing
                                   ? GestureDetector(
-                                      child: Container(
+                                      child:ConstrainedBox(
+//                                        constraints: const BoxConstraints.expand(),
+                                        constraints: BoxConstraints(maxHeight:240),
+                                        // constraints: BoxConstraints(minWidth: 100),
+//                                         constraints: BoxConstraints.lerp(BoxConstraints(minHeight: 0), BoxConstraints(minHeight: 150), 0.5),
+                                        // constraints: BoxConstraints.loose(Size(30,120)),
+                                        // constraints: BoxConstraints.tight(Size(30,120)),
+                                        // constraints: BoxConstraints.lerp(a, b, t),
+                                        // constraints: BoxConstraints.expand(width: 150,height: 150),
+                                        // constraints: BoxConstraints.tightForFinite(),
+                                        child: Container(
                                         decoration: item == provider.index
                                             ? BoxDecoration(
                                                 border: Border.all(
@@ -243,17 +250,16 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                                               )
                                             : null,
                                         padding: EdgeInsets.only(
-                                            left: 8,
-                                            right: 8,
+                                            left: 16,
+                                            right: 16,
                                             top: 8,
                                             bottom: 8),
                                         width: double.infinity,
-                                        height: 250,
                                         child: Image.file(
                                           File(provider.imagePath(provider.diary.sections[item].imagePath)),
                                           fit: BoxFit.cover,
                                         ),
-                                      ),
+                                      ),),
                                       onTap: () {
                                         if (!provider.isEditing) {
                                           return;
@@ -265,26 +271,38 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                                     )
                                   : FullScreenView(
                                       tag: 'image$item',
-                                      child: Container(
-                                        decoration: item == provider.index
-                                            ? BoxDecoration(
-                                                border: Border.all(
-                                                    color: Colors.blue,
-                                                    width: 1.5), // 边色与边宽度
-                                              )
-                                            : null,
-                                        padding: EdgeInsets.only(
-                                            left: 8,
-                                            right: 8,
-                                            top: 8,
-                                            bottom: 8),
-                                        width: double.infinity,
-                                        height: 250,
-                                        child: Image.file(
-                                          File(provider.imagePath(provider.diary.sections[item].imagePath)),
-                                          fit: BoxFit.fitWidth,
+                                      child: ConstrainedBox(
+//                                        constraints: const BoxConstraints.expand(),
+                                         constraints: BoxConstraints(maxHeight:240),
+                                        // constraints: BoxConstraints(minWidth: 100),
+//                                         constraints: BoxConstraints.lerp(BoxConstraints(minHeight: 0), BoxConstraints(minHeight: 150), 0.5),
+                                        // constraints: BoxConstraints.loose(Size(30,120)),
+                                        // constraints: BoxConstraints.tight(Size(30,120)),
+                                        // constraints: BoxConstraints.lerp(a, b, t),
+                                        // constraints: BoxConstraints.expand(width: 150,height: 150),
+                                        // constraints: BoxConstraints.tightForFinite(),
+                                        child:  Container(
+                                          decoration: item == provider.index
+                                              ? BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.blue,
+                                                width: 1.5), // 边色与边宽度
+                                          )
+                                              : null,
+                                          padding: EdgeInsets.only(
+                                              left: 16,
+                                              right: 16,
+                                              top: 8,
+                                              bottom: 8),
+                                          width: double.infinity,
+                                          child: Image.file(
+                                            File(provider.imagePath(provider.diary.sections[item].imagePath)),
+                                            fit: BoxFit.fitWidth,
+                                          ),
                                         ),
+
                                       ),
+
                                       fullChild: Image.file(
                                         File(provider.imagePath(provider.diary.sections[item].imagePath)),
                                         fit: BoxFit.cover,
@@ -303,8 +321,9 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                                     )
                                   : null,
                               padding: EdgeInsets.only(
-                                  left: 8, top: 8, right: 8, bottom: 8),
+                                  left: 16, top: 8, right: 16, bottom: 8),
                               child: TextField(
+                                style: Theme.of(context).textTheme.bodyText1,
                                 autofocus: item == provider.index,
                                 enabled: provider.isEditing,
                                 controller: TextEditingController(
