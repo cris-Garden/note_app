@@ -8,7 +8,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Selector<HomePageProvider, HomePageProvider>(
-      shouldRebuild: (pre,next){
+      shouldRebuild: (pre, next) {
         return pre.changeFlag;
       },
       builder: (context, provider, _) {
@@ -39,16 +39,14 @@ class HomePage extends StatelessWidget {
                       final kes = provider.diaryTimeMap.keys.toList();
                       final title = kes[index];
                       final diarys = provider.diaryTimeMap[title];
-                      return ExpansionTile(
-                        initiallyExpanded: true,
-                        title: Text(title),
+                      return Column(
                         children: List.generate(
                           diarys.length,
                           (index_d) {
                             return TitleCell(
                               diarys[index_d],
-                              showTopLine: index_d == 0,
-                              showBottomLine: index_d != diarys.length - 1,
+                              showTopLine: false,
+                              showBottomLine: false,
                               onTap: () {
                                 Navigator.of(context)
                                     .push(MaterialPageRoute(builder: (context) {
@@ -57,7 +55,14 @@ class HomePage extends StatelessWidget {
                               },
                             );
                           },
-                        ),
+                        )..insert(
+                            0,
+                             Container(
+                               margin: EdgeInsets.only(top: 16,left: 16),
+                               width: double.infinity,
+                                child: Text(title),
+                              ),
+                          ),
                       );
                     },
                     itemCount: provider.diaryTimeMap.keys.length,
@@ -72,5 +77,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-
-

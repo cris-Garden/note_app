@@ -31,61 +31,65 @@ class TitleCell extends StatelessWidget {
 
     return GestureDetector(
       onTap: onTap,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          showTopLine?Divider(
-            height: 2,
-            indent: 8,
-            color: Colors.grey,
-          ):null,
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(8),
-            child: Text(
-              diary.title,
-              style: Theme.of(context).textTheme.headline2,
-              textAlign: TextAlign.left,
+      child: Card(
+        margin: EdgeInsets.only(left: 16,top: 16,right: 16),
+        elevation: 8,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            showTopLine?Divider(
+              height: 2,
+              indent: 8,
+              color: Colors.grey,
+            ):null,
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(8),
+              child: Text(
+                diary.title,
+                style: Theme.of(context).textTheme.headline2,
+                textAlign: TextAlign.left,
+              ),
             ),
-          ),
-          hasTitle
-              ? Container(
-                  padding: EdgeInsets.all(8),
-                  child: Text(
-                    title,
-                    style: Theme.of(context).textTheme.bodyText1,
-                    maxLines: 8,
-                  ),
-                )
-              : null,
-          images.length > 0
-              ? Container(
-                  padding: const EdgeInsets.all(8),
-                  height: 90,
-                  child: GridView.count(
-                    //滚动方向
-                    scrollDirection: Axis.vertical,
-                    crossAxisCount: 4,
-                    crossAxisSpacing: 10,
-                    children:
-                        List.generate([images.length, 4].reduce(min), (index) {
-                      final imageName = images[index].split('_').last;
-                      final imagePath = FileUtil().fileFromDocsDir(
-                          'image/${diary.fileName}/$imageName');
-                      return Image.file(
-                        File(imagePath),
-                        fit: BoxFit.cover,
-                      );
-                    }),
-                  ))
-              : null,
-          showBottomLine?Divider(
-            height: 2,
-            indent: 8,
-            color: Colors.grey,
-          ):null,
-        ]..removeWhere((element) => element == null),
+            hasTitle
+                ? Container(
+                    padding: EdgeInsets.all(8),
+                    child: Text(
+                      title,
+                      style: Theme.of(context).textTheme.bodyText1,
+                      maxLines: 8,
+                    ),
+                  )
+                : null,
+            images.length > 0
+                ? Container(
+                    padding: const EdgeInsets.all(8),
+                    height: 90,
+                    child: GridView.count(
+                      //滚动方向
+                      scrollDirection: Axis.vertical,
+                      crossAxisCount: 4,
+                      crossAxisSpacing: 10,
+                      children:
+                          List.generate([images.length, 4].reduce(min), (index) {
+                        final imageName = images[index].split('_').last;
+                        final imagePath = FileUtil().fileFromDocsDir(
+                            'image/${diary.fileName}/$imageName');
+                        return Image.file(
+                          File(imagePath),
+                          fit: BoxFit.cover,
+                        );
+                      }),
+                    ))
+                : null,
+            showBottomLine?Divider(
+              height: 2,
+              indent: 8,
+              color: Colors.grey,
+            ):null,
+          ]..removeWhere((element) => element == null),
+        ),
       ),
     );
   }
