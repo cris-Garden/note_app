@@ -79,44 +79,6 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                 ),
                 actions: <Widget>[
                   Container(
-                    padding: EdgeInsets.only(top: 15,bottom: 15,left: 5,right: 5),
-                    child: GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (_) {
-                              return AlertDialog(
-                                title: Text("提示"),
-                                content: Text("是否删除该日记？"),
-                                actions: <Widget>[
-                                  // ボタン領域
-                                  FlatButton(
-                                    child: Text("Cancel"),
-                                    onPressed: () => Navigator.pop(context),
-                                  ),
-                                  FlatButton(
-                                    child: Text("OK"),
-                                    onPressed: () {
-                                      provider.deleteDiary().then((value) {
-                                        homePageProvider.diarys.remove(diary);
-                                        homePageProvider.didChange();
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
-                                      });
-                                    }
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                        child: Text(
-                          '删除',
-                          style: Theme.of(context).textTheme.button,
-                          textAlign: TextAlign.center,
-                        )),
-                  ),
-                  Container(
                     padding: EdgeInsets.only(left: 5,top: 15,bottom: 15,right: 5),
                     child: GestureDetector(
                         onTap: () {

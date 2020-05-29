@@ -100,6 +100,12 @@ class HomePage extends StatelessWidget {
                               return DiaryDetailPage(diarys[index]);
                             }));
                           },
+                          onDelete: (){
+                            final diary = diarys[index];
+                            provider.diarys.remove(diary);
+                            diary.delete();
+                            provider.didChange();
+                          },
                         );
                       },
                     ));

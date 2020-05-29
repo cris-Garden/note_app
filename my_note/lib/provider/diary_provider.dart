@@ -111,10 +111,7 @@ class DiaryProvider with ChangeNotifier {
       notifyListeners();
     });
   }
-
-  Future<void> deleteDiary() async{
-    await diary.delete();
-  }
+  
 
   void delete() {
     if (index == 1000) return;
