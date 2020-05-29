@@ -68,44 +68,41 @@ class HomePage extends StatelessWidget {
               ),
               body: Container(
                 child: Selector<HomePageProvider, bool>(
-                    builder: (_, didChange, child) {
-                  return ListView.builder(
-                    itemBuilder: (context, index) {
-                      final kes = provider.diaryTimeMap.keys.toList();
-                      final title = kes[index];
-                      final diarys = provider.diaryTimeMap[title];
-                      return RepaintBoundary(
-                          key: rootWidgetKey,
-                          child:Container(
-                            color: Theme.of(context).primaryColor,
-                            child: Column(
-                              children: List.generate(
-                                diarys.length,
-                                    (index_d) {
-                                  return TitleCell(
-                                    diarys[index_d],
-                                    onTap: () {
-                                      Navigator.of(context)
-                                          .push(MaterialPageRoute(builder: (context) {
-                                        return DiaryDetailPage(diarys[index_d]);
-                                      }));
-                                    },
-                                  );
-                                },
-                              )..insert(
-                                0,
-                                Container(
-                                  margin: EdgeInsets.only(top: 16,left: 16),
-                                  width: double.infinity,
-                                  child: Text(title,style: Theme.of(context).textTheme.bodyText1,),
-                                ),
-                              ),
-                            ),
-                          )
-                      );
-                    },
-                    itemCount: provider.diaryTimeMap.keys.length,
-                  );
+                    builder: (context, didChange, child) {
+                      final keys = provider.diaryTimeMap.keys.toList();
+                      final widgets = <Widget>[];
+                      for(final key in keys){
+                        final diarys = provider.diaryTimeMap[key];
+                        widgets.add(Container(
+                          margin: EdgeInsets.only(top: 16,left: 16),
+                          width: double.infinity,
+                          child: Text(key,style: Theme.of(context).textTheme.bodyText1,),
+                        ),);
+                        widgets.addAll(List.generate(
+                          diarys.length,
+                              (index) {
+                            return TitleCell(
+                              diarys[index],
+                              onTap: () {
+                                Navigator.of(context)
+                                    .push(MaterialPageRoute(builder: (context) {
+                                  return DiaryDetailPage(diarys[index]);
+                                }));
+                              },
+                            );
+                          },
+                        ));
+                      }
+
+                  return SingleChildScrollView(child: RepaintBoundary(
+                      key: rootWidgetKey,
+                      child:Container(
+                        color: Theme.of(context).primaryColor,
+                        child: Column(
+                            children: widgets
+                        ),
+                      )
+                  ),) ;
                 }, selector: (context, provider) {
                   return provider.changeFlag;
                 }),

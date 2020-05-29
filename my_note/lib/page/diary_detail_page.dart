@@ -70,9 +70,10 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                   maxLines: 1,
                   onChanged: (value) {
                     diary.setTitle(value);
+                    diary.save();
                   },
                   onEditingComplete: () {
-                    diary.save();
+
                     homePageProvider.didChange();
                   },
                 ),

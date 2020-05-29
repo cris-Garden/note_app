@@ -83,8 +83,9 @@ class Diary {
   DateTime updateTime;
 
   void setTitle(String title) {
-    final section =
-        sections.where((element) => element.type == SectionType.firstTitle) as Section;
+    final section = sections
+        .firstWhere((element) => element.type == SectionType.firstTitle);
+    print(section);
     section.title = title;
   }
 
