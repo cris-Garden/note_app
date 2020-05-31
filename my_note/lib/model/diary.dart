@@ -83,8 +83,13 @@ class Diary {
   DateTime updateTime;
 
   void setTitle(String title) {
-    final section = sections
-        .firstWhere((element) => element.type == SectionType.firstTitle);
+    Section section;
+    section = sections.firstWhere(
+        (element) => element.type == SectionType.firstTitle, orElse: () {
+      section = Section(type: SectionType.firstTitle);
+      sections.insert(0, section);
+      return section;
+    });
     print(section);
     section.title = title;
   }

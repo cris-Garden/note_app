@@ -1,6 +1,10 @@
 import 'dart:io';
-
+import 'dart:typed_data';
+import 'dart:ui';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:image_pickers/image_pickers.dart';
 import 'package:path/path.dart' as p;
 
 class FileUtil {
@@ -13,6 +17,23 @@ class FileUtil {
   }
 
   Directory appDocsDir;
+
+  //截取长屏到本地
+  Future<void> capturePng(GlobalKey rootWidgetKey) async {
+    try {
+      RenderRepaintBoundary boundary =
+      rootWidgetKey.currentContext.findRenderObject();
+      var image = await boundary.toImage(pixelRatio: 3.0);
+      ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
+      Uint8List pngBytes = byteData.buffer.asUint8List();
+      String dataImagePath = await ImagePickers.saveByteDataImageToGallery(
+        pngBytes,
+      );
+    } catch (e) {
+      print(e);
+    }
+    return;
+  }
 
   String fileFromDocsDir(String filename) {
     String pathName = p.join(appDocsDir.path, filename);

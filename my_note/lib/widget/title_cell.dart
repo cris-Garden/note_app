@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:my_note/model/diary.dart';
 import 'package:my_note/model/section.dart';
+import 'package:my_note/util/alert_util.dart';
 import 'package:my_note/util/file_util.dart';
 
 class TitleCell extends StatelessWidget {
@@ -46,33 +47,15 @@ class TitleCell extends StatelessWidget {
                 color: Colors.red,
                 icon: Icons.delete,
                 onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (_) {
-                      return AlertDialog(
-                        title: Text("提示"),
-                        content: Text("是否删除该日记？"),
-                        actions: <Widget>[
-                          // ボタン領域
-                          FlatButton(
-                            child: Text("Cancel"),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                          FlatButton(
-                              child: Text("OK"),
-                              onPressed: () {
-                                Navigator.pop(context);
-                                if(this.onDelete != null){
-                                  onDelete();
-                                }
-                                print('删除click');
-                              }
-                          ),
-                        ],
-                      );
-                    },
-                  );
-
+                  showTextAlert('是否删除该日记？', context,
+                      okClick: () {
+                        Navigator.pop(context);
+                        if(this.onDelete != null){
+                          onDelete();
+                        }
+                      }, cancelClick: () {
+                        Navigator.pop(context);
+                      });
                 },
               ),
             ),

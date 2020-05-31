@@ -1,34 +1,15 @@
-import 'dart:typed_data';
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:image_pickers/image_pickers.dart';
 import 'package:my_note/page/diary_detail_page.dart';
 import 'package:my_note/provider/home_page_provider.dart';
 import 'package:my_note/util/tool_util.dart';
 import 'package:my_note/widget/title_cell.dart';
 import 'package:provider/provider.dart';
+import 'package:my_note/util/file_util.dart';
 
 class HomePage extends StatelessWidget {
   //截取长屏
   GlobalKey rootWidgetKey = GlobalKey();
-
-  Future<void> _capturePng() async {
-    try {
-      RenderRepaintBoundary boundary =
-          rootWidgetKey.currentContext.findRenderObject();
-      var image = await boundary.toImage(pixelRatio: 3.0);
-      ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
-      Uint8List pngBytes = byteData.buffer.asUint8List();
-      String dataImagePath = await ImagePickers.saveByteDataImageToGallery(
-        pngBytes,
-      );
-    } catch (e) {
-      print(e);
-    }
-    return;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +32,7 @@ class HomePage extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () {
                         //截取长屏
-                        _capturePng();
+                        FileUtil().capturePng(rootWidgetKey);;
                       },
                       child: Icon(Icons.file_download),
                     ),
