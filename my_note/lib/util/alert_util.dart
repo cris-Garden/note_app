@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 void showTextAlert(
   String text,
   BuildContext context, {
-    String title,
+  String title,
   String ok,
   String cancel,
   VoidCallback okClick,
@@ -36,5 +36,36 @@ void showTextAlert(
         ],
       );
     },
+  );
+}
+
+
+
+void showSheet(
+  BuildContext context,
+  List<String> titles, {
+  Function(int index) onClick,
+}) {
+  showModalBottomSheet(
+    context: context,
+    builder: (context) => Container(
+      child: Column(
+          children: List.generate(
+        titles.length,
+        (index) => GestureDetector(
+            child: Container(
+              alignment: Alignment.center,
+              height: 45.0,
+              child: Text(titles[index]),
+            ),
+            onTap: () {
+              if (onClick != null) {
+                onClick(index);
+              }
+              Navigator.pop(context);
+            }),
+      )),
+      height: 45 * titles.length.toDouble(),
+    ),
   );
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_note/model/diary.dart';
+import 'package:my_note/model/section.dart';
 import 'package:my_note/provider/diary_provider.dart';
 import 'package:my_note/provider/home_page_provider.dart';
 import 'package:my_note/util/alert_util.dart';
@@ -17,11 +18,6 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
 
   //截取长屏
   GlobalKey rootWidgetKey = GlobalKey();
-
-  Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    return image;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +60,12 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                         EdgeInsets.only(left: 5, top: 15, bottom: 15, right: 5),
                     child: GestureDetector(
                       onTap: () {
-                        //截取长屏
-                        FileUtil().capturePng(rootWidgetKey);
+                        showTextAlert('是否将日志内容截长屏到相册？', context,okClick: (){
+                          //截取长屏
+                          FileUtil().capturePng(rootWidgetKey);
+                        },cancelClick: (){
+                          Navigator.of(context).pop();
+                        });
                       },
                       child: Icon(Icons.file_download),
                     ),
@@ -100,24 +100,24 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                             children: <Widget>[
                               GestureDetector(
                                 child: Icon(
-                                  Icons.text_fields,
+                                  Icons.add,
                                   size: 40.0,
                                 ),
                                 onTap: () {
-                                  provider.addText();
-                                },
-                              ),
-                              GestureDetector(
-                                child: Icon(
-                                  Icons.image,
-                                  size: 40.0,
-                                ),
-                                onTap: () {
-                                  getImage().then((image) {
-                                    provider.addImage(image, didSave: () {
-                                      homePageProvider.didChange();
-                                    });
+                                  showSheet(context, ['文本', '图片','图片靠上卡片','图片靠下卡片','图片靠左卡片','图片靠右卡片',], onClick: (index) {
+                                    print(index);
+                                    if(index == 1){
+                                      FileUtil().getImage().then((image) {
+                                        provider.addImage(image, didSave: () {
+                                          homePageProvider.didChange();
+                                        });
+                                      });
+                                      return;
+                                    }
+                                    final addSection = Section(type: SectionType.values[index+2]);
+                                    provider.addSection(addSection);
                                   });
+//                                  provider.addText();
                                 },
                               ),
                               GestureDetector(

@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:my_note/model/section.dart';
 import 'package:my_note/provider/diary_provider.dart';
 import 'package:my_note/provider/home_page_provider.dart';
+import 'package:my_note/util/file_util.dart';
+import 'package:my_note/widget/section/card_view.dart';
 import 'package:provider/provider.dart';
 import 'dart:io';
 
 import 'full_screen_view.dart';
 
 class DiaryDetailWidget extends StatelessWidget {
+
   DiaryDetailWidget({this.rootWidgetKey});
 
   final GlobalKey rootWidgetKey;
@@ -21,104 +24,207 @@ class DiaryDetailWidget extends StatelessWidget {
       builder: (context, count, child) {
         final widgets = <Widget>[];
         for (int item = 0; item < provider.diary.sections.length; item++) {
-          if (provider.diary.sections[item].type == SectionType.image) {
-            widgets.add(provider.isEditing
-                ? GestureDetector(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(maxHeight: 240),
-                      child: Container(
-                        decoration: item == provider.index
-                            ? BoxDecoration(
-                                border: Border.all(
-                                    color: Colors.blue, width: 1.5), // 边色与边宽度
-                              )
-                            : null,
-                        padding: EdgeInsets.only(
-                            left: 16, right: 16, top: 8, bottom: 8),
-                        width: double.infinity,
-                        child: Image.file(
-                          File(provider.imagePath(
-                              provider.diary.sections[item].imagePath)),
-                          fit: BoxFit.cover,
+          final section = provider.diary.sections[item];
+          final diary = provider.diary;
+          final imagePath = FileUtil().imagePath(diary.fileName, section.imagePath);
+          switch (section.type) {
+            case SectionType.firstTitle:
+              widgets.add(Container());
+              break;
+            case SectionType.title:
+              widgets.add(Container());
+              break;
+            case SectionType.text:
+              widgets.add(Container(
+                decoration: item == provider.index
+                    ? BoxDecoration(
+                        border: Border.all(
+                            color: Colors.blue, width: 1.5), // 边色与边宽度
+                      )
+                    : null,
+                padding:
+                    EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 8),
+                child: TextField(
+                  style: Theme.of(context).textTheme.bodyText1,
+                  autofocus: item == provider.index,
+                  enabled: provider.isEditing,
+                  controller: TextEditingController(
+                      text: provider.diary.sections[item].text),
+                  decoration: provider.isEditing
+                      ? InputDecoration(hintText: "输入你想要记录的内容...")
+                      : null,
+                  maxLines: null,
+                  onChanged: (value) {
+                    provider.saveText(value, item);
+                  },
+                  onSubmitted: (value) {
+                    provider.setIndex(1000);
+                    homePageProvider.doChange();
+                  },
+                  onTap: () {
+                    print(item);
+                    provider.setIndex(item);
+                  },
+                ),
+              ));
+              break;
+            case SectionType.image:
+              widgets.add(provider.isEditing
+                  ? GestureDetector(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxHeight: 240),
+                        child: Container(
+                          decoration: item == provider.index
+                              ? BoxDecoration(
+                                  border: Border.all(
+                                      color: Colors.blue, width: 1.5), // 边色与边宽度
+                                )
+                              : null,
+                          padding: EdgeInsets.only(
+                              left: 16, right: 16, top: 8, bottom: 8),
+                          width: double.infinity,
+                          child: Image.file(
+                            File(imagePath),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
-                    ),
-                    onTap: () {
-                      if (!provider.isEditing) {
-                        return;
-                      }
-                      provider.setIndex(item);
-                      FocusScope.of(context).requestFocus(FocusNode());
+                      onTap: () {
+                        if (!provider.isEditing) {
+                          return;
+                        }
+                        provider.setIndex(item);
+                        FocusScope.of(context).requestFocus(FocusNode());
+                      },
+                    )
+                  : FullScreenView(
+                      tag: 'image$item',
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxHeight: 240),
+                        child: Container(
+                          decoration: item == provider.index
+                              ? BoxDecoration(
+                                  border: Border.all(
+                                      color: Colors.blue, width: 1.5), // 边色与边宽度
+                                )
+                              : null,
+                          padding: EdgeInsets.only(
+                            left: 16,
+                            right: 16,
+                            top: 8,
+                            bottom: 8,
+                          ),
+                          width: double.infinity,
+                          child: Image.file(
+                            File(imagePath),
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
+                      ),
+                      fullChild: Image.file(
+                        File(provider.imagePath(
+                            provider.diary.sections[item].imagePath)),
+                        fit: BoxFit.cover,
+                      ),
+                    ));
+              break;
+            case SectionType.topImageCard:
+              widgets.add(Container(
+                padding: EdgeInsets.only(
+                  left: 8,
+                  right: 8,
+                  top: 8,
+                  bottom: 8,
+                ),
+                child: CardView(
+                  enable: provider.isEditing,
+                  type: CardViewType.TopImage,
+                  imagePath: imagePath,
+                  text: section.text,
+                  imageClick: (){
+                    FileUtil().getImage().then((image){
+                      provider.addImageTo(section,image, didSave: () {
+                        homePageProvider.didChange();
+                      });
+                    });
+                  },
+                ),
+              ));
+              break;
+            case SectionType.bottomImageCard:
+              widgets.add(
+                Container(
+                  padding: EdgeInsets.only(
+                    left: 8,
+                    right: 8,
+                    top: 8,
+                    bottom: 8,
+                  ),
+                  child: CardView(
+                    enable: provider.isEditing,
+                    imagePath: imagePath,
+                    text: section.text,
+                    imageClick: (){
+                      FileUtil().getImage().then((image){
+                        provider.addImageTo(section,image, didSave: () {
+                          homePageProvider.didChange();
+                        });
+                      });
                     },
-                  )
-                : FullScreenView(
-                    tag: 'image$item',
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(maxHeight: 240),
-                      child: Container(
-                        decoration: item == provider.index
-                            ? BoxDecoration(
-                                border: Border.all(
-                                    color: Colors.blue, width: 1.5), // 边色与边宽度
-                              )
-                            : null,
-                        padding: EdgeInsets.only(
-                            left: 16, right: 16, top: 8, bottom: 8),
-                        width: double.infinity,
-                        child: Image.file(
-                          File(provider.imagePath(
-                              provider.diary.sections[item].imagePath)),
-                          fit: BoxFit.fitWidth,
-                        ),
-                      ),
-                    ),
-                    fullChild: Image.file(
-                      File(provider
-                          .imagePath(provider.diary.sections[item].imagePath)),
-                      fit: BoxFit.cover,
-                    ),
-                  ));
-            continue;
+                    type: CardViewType.BottomImage,
+                  ),
+                ),
+              );
+              break;
+            case SectionType.leftImageCard:
+              widgets.add(Container(
+                  padding: EdgeInsets.only(
+                    left: 8,
+                    right: 8,
+                    top: 8,
+                    bottom: 8,
+                  ),
+                  child: CardView(
+                    type: CardViewType.LeftImage,
+                    enable: provider.isEditing,
+                    imagePath: imagePath,
+                    text: section.text,
+                    imageClick: (){
+                      FileUtil().getImage().then((image){
+                        provider.addImageTo(section,image, didSave: () {
+                          homePageProvider.didChange();
+                        });
+                      });
+                    },
+                  )));
+              break;
+            case SectionType.rightImageCard:
+              widgets.add(Container(
+                  padding: EdgeInsets.only(
+                    left: 8,
+                    right: 8,
+                    top: 8,
+                    bottom: 8,
+                  ),
+                  child: CardView(
+                    type: CardViewType.RightImage,
+                    enable: provider.isEditing,
+                    imagePath: imagePath,
+                    text: section.text,
+                    imageClick: (){
+                      FileUtil().getImage().then((image){
+                        provider.addImageTo(section,image, didSave: () {
+                          homePageProvider.didChange();
+                        });
+                      });
+                    },
+                  )));
+              break;
           }
-          if (provider.diary.sections[item].type == SectionType.firstTitle) {
-            widgets.add(Container());
-            continue;
-          }
-          widgets.add(Container(
-            decoration: item == provider.index
-                ? BoxDecoration(
-                    border:
-                        Border.all(color: Colors.blue, width: 1.5), // 边色与边宽度
-                  )
-                : null,
-            padding: EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 8),
-            child: TextField(
-              style: Theme.of(context).textTheme.bodyText1,
-              autofocus: item == provider.index,
-              enabled: provider.isEditing,
-              controller: TextEditingController(
-                  text: provider.diary.sections[item].text),
-              decoration: provider.isEditing
-                  ? InputDecoration(hintText: "输入你想要记录的内容...")
-                  : null,
-              maxLines: null,
-              onChanged: (value) {
-                provider.saveText(value, item);
-              },
-              onSubmitted: (value) {
-                provider.setIndex(1000);
-                homePageProvider.doChange();
-              },
-              onTap: () {
-                print(item);
-                provider.setIndex(item);
-              },
-            ),
-          ));
         }
-        return  Column(
-            children: widgets,
-          );
+        return Column(
+          children: widgets,
+        );
       },
     );
   }

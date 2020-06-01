@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:my_note/page/diary_detail_page.dart';
 import 'package:my_note/provider/home_page_provider.dart';
+import 'package:my_note/util/alert_util.dart';
 import 'package:my_note/util/tool_util.dart';
 import 'package:my_note/widget/title_cell.dart';
 import 'package:provider/provider.dart';
@@ -31,8 +32,12 @@ class HomePage extends StatelessWidget {
                         EdgeInsets.only(left: 5, top: 15, bottom: 15, right: 5),
                     child: GestureDetector(
                       onTap: () {
-                        //截取长屏
-                        FileUtil().capturePng(rootWidgetKey);;
+                        showTextAlert('是否将日记列表截长屏到相册？', context,okClick: (){
+                          //截取长屏
+                          FileUtil().capturePng(rootWidgetKey);
+                        },cancelClick: (){
+                          Navigator.of(context).pop();
+                        });
                       },
                       child: Icon(Icons.file_download),
                     ),

@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:image_pickers/image_pickers.dart';
 import 'package:path/path.dart' as p;
 
@@ -17,6 +18,21 @@ class FileUtil {
   }
 
   Directory appDocsDir;
+
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    return image;
+  }
+
+  //输入图片名字例：和日志名字：1590655478140.png例：1590638902713
+  String imagePath(String diaryName,String path) {
+    if(path == null){
+      return null;
+    }
+    final imagePath =
+    fileFromDocsDir('image/$diaryName/$path');
+    return imagePath;
+  }
 
   //截取长屏到本地
   Future<void> capturePng(GlobalKey rootWidgetKey) async {
