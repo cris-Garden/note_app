@@ -46,7 +46,7 @@ class DiaryDetailWidget extends StatelessWidget {
                     EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 8),
                 child: TextField(
                   style: Theme.of(context).textTheme.bodyText1,
-                  autofocus: item == provider.index,
+//                  autofocus: item == provider.index,
                   enabled: provider.isEditing,
                   controller: TextEditingController(
                       text: provider.diary.sections[item].text),
@@ -129,14 +129,15 @@ class DiaryDetailWidget extends StatelessWidget {
                     ));
               break;
             case SectionType.topImageCard:
-              widgets.add(Container(
-                padding: EdgeInsets.only(
-                  left: 8,
-                  right: 8,
-                  top: 8,
-                  bottom: 8,
-                ),
-                child: CardView(
+              widgets.add(CardView(
+                  onChanged: (value) {
+                    provider.saveText(value, item);
+                  },
+                  onSubmitted: (value) {
+                    provider.setIndex(1000);
+                    homePageProvider.doChange();
+                  },
+                  item: item,
                   enable: provider.isEditing,
                   type: CardViewType.TopImage,
                   imagePath: imagePath,
@@ -149,18 +150,19 @@ class DiaryDetailWidget extends StatelessWidget {
                     });
                   },
                 ),
-              ));
+              );
               break;
             case SectionType.bottomImageCard:
               widgets.add(
-                Container(
-                  padding: EdgeInsets.only(
-                    left: 8,
-                    right: 8,
-                    top: 8,
-                    bottom: 8,
-                  ),
-                  child: CardView(
+                CardView(
+                    onChanged: (value) {
+                      provider.saveText(value, item);
+                    },
+                    onSubmitted: (value) {
+                      provider.setIndex(1000);
+                      homePageProvider.doChange();
+                    },
+                    item: item,
                     enable: provider.isEditing,
                     imagePath: imagePath,
                     text: section.text,
@@ -173,18 +175,11 @@ class DiaryDetailWidget extends StatelessWidget {
                     },
                     type: CardViewType.BottomImage,
                   ),
-                ),
               );
               break;
             case SectionType.leftImageCard:
-              widgets.add(Container(
-                  padding: EdgeInsets.only(
-                    left: 8,
-                    right: 8,
-                    top: 8,
-                    bottom: 8,
-                  ),
-                  child: CardView(
+              widgets.add(CardView(
+                    item: item,
                     type: CardViewType.LeftImage,
                     enable: provider.isEditing,
                     imagePath: imagePath,
@@ -196,17 +191,18 @@ class DiaryDetailWidget extends StatelessWidget {
                         });
                       });
                     },
-                  )));
+                    onChanged: (value) {
+                      provider.saveText(value, item);
+                    },
+                    onSubmitted: (value) {
+                      provider.setIndex(1000);
+                      homePageProvider.doChange();
+                    },
+                  ));
               break;
             case SectionType.rightImageCard:
-              widgets.add(Container(
-                  padding: EdgeInsets.only(
-                    left: 8,
-                    right: 8,
-                    top: 8,
-                    bottom: 8,
-                  ),
-                  child: CardView(
+              widgets.add(CardView(
+                    item: item,
                     type: CardViewType.RightImage,
                     enable: provider.isEditing,
                     imagePath: imagePath,
@@ -218,7 +214,14 @@ class DiaryDetailWidget extends StatelessWidget {
                         });
                       });
                     },
-                  )));
+                    onChanged: (value) {
+                      provider.saveText(value, item);
+                    },
+                    onSubmitted: (value) {
+                      provider.setIndex(1000);
+                      homePageProvider.doChange();
+                    },
+                  ));
               break;
           }
         }

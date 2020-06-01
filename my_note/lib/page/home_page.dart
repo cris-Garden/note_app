@@ -26,6 +26,7 @@ class HomePage extends StatelessWidget {
                   '日記',
                   style: Theme.of(context).textTheme.headline1,
                 ),
+                centerTitle: true,
                 actions: <Widget>[
                   Container(
                     padding:
@@ -33,13 +34,34 @@ class HomePage extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () {
                         showTextAlert('是否将日记列表截长屏到相册？', context,okClick: (){
-                          //截取长屏
-                          FileUtil().capturePng(rootWidgetKey);
+                          Navigator.of(context).pop();
+                          showLoading(context);
+                          FileUtil().capturePng(rootWidgetKey).then((value){
+                            hideLoading(context);
+                          });
                         },cancelClick: (){
                           Navigator.of(context).pop();
                         });
                       },
-                      child: Icon(Icons.file_download),
+                      child: Icon(Icons.file_download,size: 25,),
+                    ),
+                  ),
+                  Container(
+                    padding:
+                    EdgeInsets.only(left: 5, top: 15, bottom: 15, right: 5),
+                    child: GestureDetector(
+                      onTap: () {
+                        showTextAlert('是否将日记列表截长屏到相册？', context,okClick: (){
+                          Navigator.of(context).pop();
+                          showLoading(context);
+                          FileUtil().capturePng(rootWidgetKey).then((value){
+                            hideLoading(context);
+                          });
+                        },cancelClick: (){
+                          Navigator.of(context).pop();
+                        });
+                      },
+                      child: Icon(Icons.settings,size: 25,),
                     ),
                   ),
                 ],

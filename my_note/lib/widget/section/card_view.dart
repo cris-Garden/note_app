@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-
+import 'package:my_note/provider/diary_provider.dart';
+import 'package:provider/provider.dart';
 import '../full_screen_view.dart';
 
 class CardView extends StatelessWidget {
@@ -14,6 +15,7 @@ class CardView extends StatelessWidget {
     this.onChanged,
     this.onSubmitted,
     this.imageClick,
+    this.backClick,
     this.item = 0,
   });
 
@@ -21,7 +23,7 @@ class CardView extends StatelessWidget {
 
   final CardViewType type;
 
-  final bool isEditing;
+  bool isEditing;
 
   final bool enable;
 
@@ -30,6 +32,8 @@ class CardView extends StatelessWidget {
   final String text;
 
   final VoidCallback imageClick;
+
+  final VoidCallback backClick;
 
   final VoidCallback onTap;
 
@@ -43,11 +47,19 @@ class CardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<DiaryProvider>(context);
+    isEditing = provider.index == item;
     final imageV = enable
         ? GestureDetector(
-            onTap:hasImage() ?null:this.imageClick,
+            onTap: () {
+              if (enable) provider.setIndex(item);
+              if (hasImage()) {
+                return;
+              }
+              this.imageClick();
+            },
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: 200, minHeight: 200),
+              constraints: BoxConstraints(maxHeight: 250, minHeight: 200),
               child: Container(
                 width: double.infinity,
                 child: hasImage()
@@ -72,34 +84,45 @@ class CardView extends StatelessWidget {
             ),
           )
         : FullScreenView(
-            tag: 'image$item',
+            tag: 'cardImage$item',
             child: ConstrainedBox(
-              constraints:  BoxConstraints(maxHeight: 200, minHeight: 200),
-              child:Container(
+              constraints: BoxConstraints(maxHeight: 250, minHeight: 200),
+              child: Container(
                 width: double.infinity,
                 child: hasImage()
                     ? ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(5.0),
-                    topRight: Radius.circular(5.0),
-                  ),
-                  child: Image.file(
-                    File(imagePath ?? ''),
-                    fit: BoxFit.cover,
-                  ),
-                )
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(5.0),
+                          topRight: Radius.circular(5.0),
+                        ),
+                        child: Image.file(
+                          File(imagePath ?? ''),
+                          fit: BoxFit.cover,
+                        ),
+                      )
                     : Container(
-                  child: Icon(
-                    Icons.add_photo_alternate,
-                    size: 100,
-                    color: Colors.grey,
-                  ),
-                ),
+                        child: Icon(
+                          Icons.add_photo_alternate,
+                          size: 100,
+                          color: Colors.grey,
+                        ),
+                      ),
               ),
             ),
-            fullChild: Image.file(
-              File(imagePath),
-              fit: BoxFit.cover,
+            fullChild: Container(
+              width: double.infinity,
+              child:hasImage()
+                  ? Image.file(
+                File(imagePath),
+                fit: BoxFit.cover,
+              )
+                  : Container(
+                child: Icon(
+                  Icons.add_photo_alternate,
+                  size: 100,
+                  color: Colors.grey,
+                ),
+              ),
             ),
           );
 
@@ -108,25 +131,58 @@ class CardView extends StatelessWidget {
       padding: EdgeInsets.all(16),
       child: TextField(
         style: Theme.of(context).textTheme.bodyText1,
-        autofocus: isEditing,
         enabled: enable,
         controller: TextEditingController(text: this.text ?? ''),
-        decoration:
-            enable ? InputDecoration(hintText: "输入你想要记录的内容...") : null,
+        decoration: enable ? InputDecoration(hintText: "输入你想要记录的内容...") : null,
         maxLines: null,
-        onChanged: onChanged,
-        onSubmitted: onSubmitted,
-        onTap: onTap,
+        onChanged: (value) {
+          if (onChanged != null) {
+            onChanged(value);
+          }
+        },
+        onSubmitted: (value) {
+          if (enable) provider.setIndex(item);
+          if (onSubmitted != null) {
+            onSubmitted(value);
+          }
+        },
+        onTap: () {
+          if (enable) provider.setIndex(item);
+          if (onTap != null) {
+            onTap();
+          }
+        },
       ),
     );
 
-    return Column(
-      children: <Widget>[
-        Card(
-          elevation: 8,
-          child: getView(text, imageV),
+    return GestureDetector(
+      onTap:(){
+        if (enable) provider.setIndex(item);
+        if(backClick != null){
+          this.backClick();
+        }
+      },
+      child: Container(
+        padding: EdgeInsets.only(
+          left: 8,
+          right: 8,
+          top: 8,
+          bottom: 8,
         ),
-      ],
+        decoration: this.isEditing
+            ? BoxDecoration(
+                border: Border.all(color: Colors.blue, width: 1.5), // 边色与边宽度
+              )
+            : null,
+        child: Column(
+          children: <Widget>[
+            Card(
+              elevation: 8,
+              child: getView(text, imageV),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

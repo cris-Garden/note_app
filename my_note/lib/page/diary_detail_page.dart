@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:my_note/model/diary.dart';
 import 'package:my_note/model/section.dart';
 import 'package:my_note/provider/diary_provider.dart';
@@ -61,8 +60,12 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                     child: GestureDetector(
                       onTap: () {
                         showTextAlert('是否将日志内容截长屏到相册？', context,okClick: (){
+                          Navigator.of(context).pop();
                           //截取长屏
-                          FileUtil().capturePng(rootWidgetKey);
+                          showLoading(context);
+                          FileUtil().capturePng(rootWidgetKey).then((value){
+                            hideLoading(context);
+                          });
                         },cancelClick: (){
                           Navigator.of(context).pop();
                         });
@@ -104,7 +107,7 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                                   size: 40.0,
                                 ),
                                 onTap: () {
-                                  showSheet(context, ['文本', '图片','图片靠上卡片','图片靠下卡片','图片靠左卡片','图片靠右卡片',], onClick: (index) {
+                                  showSheet(context, ['文本', '图片','图片靠上卡片','图片靠下卡片'], onClick: (index) {
                                     print(index);
                                     if(index == 1){
                                       FileUtil().getImage().then((image) {

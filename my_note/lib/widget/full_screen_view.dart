@@ -14,6 +14,7 @@ class FullScreenView extends StatelessWidget {
     return  GestureDetector(
         child: Hero(
           tag: tag,
+          transitionOnUserGestures:true,
           child: child,
         ),
         onTap: () {

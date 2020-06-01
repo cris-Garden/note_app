@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:loading_dialog/loading_dialog.dart';
+
+LoadingDialog _loading;
 
 void showTextAlert(
   String text,
@@ -37,6 +40,16 @@ void showTextAlert(
       );
     },
   );
+}
+
+void showLoading(BuildContext context){
+  _loading = _loading == null ? LoadingDialog(buildContext: context) : _loading;
+  _loading.show();
+}
+
+void hideLoading(BuildContext context){
+  _loading = _loading == null ? LoadingDialog(buildContext: context) : _loading;
+  _loading.hide();
 }
 
 

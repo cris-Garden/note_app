@@ -21,9 +21,10 @@ class TitleCell extends StatelessWidget {
     String title;
     List<String> images = [];
     for (final section in diary.sections) {
-      if (section.type == SectionType.image) {
+      if(section.imagePath!=null){
         images.add(section.imagePath);
-      } else if (section.type == SectionType.text) {
+      }
+      if (section.text!=null) {
         title = title == null ? section.text : title;
       }
     }

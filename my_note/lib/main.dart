@@ -17,6 +17,14 @@ void main() async {
 
   await GuideUtil().init();
 
+  //生产环境不显示红色错误界面
+  if(bool.fromEnvironment("dart.vm.product")){
+    ErrorWidget.builder = (errorDetails) {
+      print(errorDetails.toString());
+      return Container();
+    };
+  }
+
   runApp(
     MyApp(),
   );
