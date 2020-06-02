@@ -4,7 +4,6 @@ import 'package:my_note/provider/home_page_provider.dart';
 import 'package:my_note/util/file_util.dart';
 import 'package:my_note/util/guide_util.dart';
 import 'package:my_note/util/theme_util.dart';
-import 'package:my_note/util/tool_util.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +14,8 @@ void main() async {
   Provider.debugCheckInvalidValueType = null;
   FileUtil().appDocsDir = await getApplicationDocumentsDirectory();
 
-  await GuideUtil().init();
+  GuideUtil().useDiary  = await GuideUtil().getUserDiary();
+  GuideUtil().backUpDiary  = await GuideUtil().getBackUpUseDiary();
 
   //生产环境不显示红色错误界面
   if(bool.fromEnvironment("dart.vm.product")){

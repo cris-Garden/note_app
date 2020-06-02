@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:my_note/page/diary_detail_page.dart';
+import 'package:my_note/page/setting_page.dart';
 import 'package:my_note/provider/home_page_provider.dart';
 import 'package:my_note/util/alert_util.dart';
 import 'package:my_note/util/tool_util.dart';
@@ -33,35 +34,36 @@ class HomePage extends StatelessWidget {
                         EdgeInsets.only(left: 5, top: 15, bottom: 15, right: 5),
                     child: GestureDetector(
                       onTap: () {
-                        showTextAlert('是否将日记列表截长屏到相册？', context,okClick: (){
+                        showTextAlert('是否将日记列表截长屏到相册？', context, okClick: () {
                           Navigator.of(context).pop();
                           showLoading(context);
-                          FileUtil().capturePng(rootWidgetKey).then((value){
+                          FileUtil().capturePng(rootWidgetKey).then((value) {
                             hideLoading(context);
                           });
-                        },cancelClick: (){
+                        }, cancelClick: () {
                           Navigator.of(context).pop();
                         });
                       },
-                      child: Icon(Icons.file_download,size: 25,),
+                      child: Icon(
+                        Icons.file_download,
+                        size: 25,
+                      ),
                     ),
                   ),
                   Container(
                     padding:
-                    EdgeInsets.only(left: 5, top: 15, bottom: 15, right: 5),
+                        EdgeInsets.only(left: 5, top: 15, bottom: 15, right: 5),
                     child: GestureDetector(
                       onTap: () {
-                        showTextAlert('是否将日记列表截长屏到相册？', context,okClick: (){
-                          Navigator.of(context).pop();
-                          showLoading(context);
-                          FileUtil().capturePng(rootWidgetKey).then((value){
-                            hideLoading(context);
-                          });
-                        },cancelClick: (){
-                          Navigator.of(context).pop();
-                        });
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return SettingPage();
+                        }));
                       },
-                      child: Icon(Icons.settings,size: 25,),
+                      child: Icon(
+                        Icons.settings,
+                        size: 25,
+                      ),
                     ),
                   ),
                 ],
@@ -108,7 +110,7 @@ class HomePage extends StatelessWidget {
                               return DiaryDetailPage(diarys[index]);
                             }));
                           },
-                          onDelete: (){
+                          onDelete: () {
                             final diary = diarys[index];
                             provider.diarys.remove(diary);
                             diary.delete();

@@ -47,7 +47,7 @@ ThemeData getBlackTheme() {
       ),
       bodyText1: TextStyle(
         height: 1.4,
-        fontSize: 15,
+        fontSize: 17,
         fontWeight: FontWeight.w400,
       ),
       button: TextStyle(

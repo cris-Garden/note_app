@@ -10,7 +10,6 @@ import 'dart:io';
 import 'full_screen_view.dart';
 
 class DiaryDetailWidget extends StatelessWidget {
-
   DiaryDetailWidget({this.rootWidgetKey});
 
   final GlobalKey rootWidgetKey;
@@ -26,7 +25,9 @@ class DiaryDetailWidget extends StatelessWidget {
         for (int item = 0; item < provider.diary.sections.length; item++) {
           final section = provider.diary.sections[item];
           final diary = provider.diary;
-          final imagePath = FileUtil().imagePath(diary.fileName, section.imagePath);
+          final imagePath = diary.isLocalDiary
+              ? section.imagePath
+              : FileUtil().imagePath(diary.fileName, section.imagePath);
           switch (section.type) {
             case SectionType.firstTitle:
               widgets.add(Container());
@@ -83,10 +84,12 @@ class DiaryDetailWidget extends StatelessWidget {
                           padding: EdgeInsets.only(
                               left: 16, right: 16, top: 8, bottom: 8),
                           width: double.infinity,
-                          child: Image.file(
-                            File(imagePath),
-                            fit: BoxFit.cover,
-                          ),
+                          child: diary.isLocalDiary
+                              ? Image.asset(imagePath)
+                              : Image.file(
+                                  File(imagePath),
+                                  fit: BoxFit.cover,
+                                ),
                         ),
                       ),
                       onTap: () {
@@ -115,21 +118,26 @@ class DiaryDetailWidget extends StatelessWidget {
                             bottom: 8,
                           ),
                           width: double.infinity,
-                          child: Image.file(
-                            File(imagePath),
-                            fit: BoxFit.fitWidth,
-                          ),
+                          child: diary.isLocalDiary
+                              ? Image.asset(imagePath)
+                              : Image.file(
+                                  File(imagePath),
+                                  fit: BoxFit.fitWidth,
+                                ),
                         ),
                       ),
-                      fullChild: Image.file(
-                        File(provider.imagePath(
-                            provider.diary.sections[item].imagePath)),
-                        fit: BoxFit.cover,
-                      ),
+                      fullChild: diary.isLocalDiary
+                          ? Image.asset(imagePath)
+                          : Image.file(
+                              File(imagePath),
+                              fit: BoxFit.cover,
+                            ),
                     ));
               break;
             case SectionType.topImageCard:
-              widgets.add(CardView(
+              widgets.add(
+                CardView(
+                  useLocal: diary.isLocalDiary,
                   onChanged: (value) {
                     provider.saveText(value, item);
                   },
@@ -142,9 +150,9 @@ class DiaryDetailWidget extends StatelessWidget {
                   type: CardViewType.TopImage,
                   imagePath: imagePath,
                   text: section.text,
-                  imageClick: (){
-                    FileUtil().getImage().then((image){
-                      provider.addImageTo(section,image, didSave: () {
+                  imageClick: () {
+                    FileUtil().getImage().then((image) {
+                      provider.addImageTo(section, image, didSave: () {
                         homePageProvider.didChange();
                       });
                     });
@@ -155,73 +163,76 @@ class DiaryDetailWidget extends StatelessWidget {
             case SectionType.bottomImageCard:
               widgets.add(
                 CardView(
-                    onChanged: (value) {
-                      provider.saveText(value, item);
-                    },
-                    onSubmitted: (value) {
-                      provider.setIndex(1000);
-                      homePageProvider.doChange();
-                    },
-                    item: item,
-                    enable: provider.isEditing,
-                    imagePath: imagePath,
-                    text: section.text,
-                    imageClick: (){
-                      FileUtil().getImage().then((image){
-                        provider.addImageTo(section,image, didSave: () {
-                          homePageProvider.didChange();
-                        });
+                  useLocal: diary.isLocalDiary,
+                  onChanged: (value) {
+                    provider.saveText(value, item);
+                  },
+                  onSubmitted: (value) {
+                    provider.setIndex(1000);
+                    homePageProvider.doChange();
+                  },
+                  item: item,
+                  enable: provider.isEditing,
+                  imagePath: imagePath,
+                  text: section.text,
+                  imageClick: () {
+                    FileUtil().getImage().then((image) {
+                      provider.addImageTo(section, image, didSave: () {
+                        homePageProvider.didChange();
                       });
-                    },
-                    type: CardViewType.BottomImage,
-                  ),
+                    });
+                  },
+                  type: CardViewType.BottomImage,
+                ),
               );
               break;
             case SectionType.leftImageCard:
               widgets.add(CardView(
-                    item: item,
-                    type: CardViewType.LeftImage,
-                    enable: provider.isEditing,
-                    imagePath: imagePath,
-                    text: section.text,
-                    imageClick: (){
-                      FileUtil().getImage().then((image){
-                        provider.addImageTo(section,image, didSave: () {
-                          homePageProvider.didChange();
-                        });
-                      });
-                    },
-                    onChanged: (value) {
-                      provider.saveText(value, item);
-                    },
-                    onSubmitted: (value) {
-                      provider.setIndex(1000);
-                      homePageProvider.doChange();
-                    },
-                  ));
+                useLocal: diary.isLocalDiary,
+                item: item,
+                type: CardViewType.LeftImage,
+                enable: provider.isEditing,
+                imagePath: imagePath,
+                text: section.text,
+                imageClick: () {
+                  FileUtil().getImage().then((image) {
+                    provider.addImageTo(section, image, didSave: () {
+                      homePageProvider.didChange();
+                    });
+                  });
+                },
+                onChanged: (value) {
+                  provider.saveText(value, item);
+                },
+                onSubmitted: (value) {
+                  provider.setIndex(1000);
+                  homePageProvider.doChange();
+                },
+              ));
               break;
             case SectionType.rightImageCard:
               widgets.add(CardView(
-                    item: item,
-                    type: CardViewType.RightImage,
-                    enable: provider.isEditing,
-                    imagePath: imagePath,
-                    text: section.text,
-                    imageClick: (){
-                      FileUtil().getImage().then((image){
-                        provider.addImageTo(section,image, didSave: () {
-                          homePageProvider.didChange();
-                        });
-                      });
-                    },
-                    onChanged: (value) {
-                      provider.saveText(value, item);
-                    },
-                    onSubmitted: (value) {
-                      provider.setIndex(1000);
-                      homePageProvider.doChange();
-                    },
-                  ));
+                useLocal: diary.isLocalDiary,
+                item: item,
+                type: CardViewType.RightImage,
+                enable: provider.isEditing,
+                imagePath: imagePath,
+                text: section.text,
+                imageClick: () {
+                  FileUtil().getImage().then((image) {
+                    provider.addImageTo(section, image, didSave: () {
+                      homePageProvider.didChange();
+                    });
+                  });
+                },
+                onChanged: (value) {
+                  provider.saveText(value, item);
+                },
+                onSubmitted: (value) {
+                  provider.setIndex(1000);
+                  homePageProvider.doChange();
+                },
+              ));
               break;
           }
         }

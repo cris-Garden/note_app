@@ -21,10 +21,10 @@ class TitleCell extends StatelessWidget {
     String title;
     List<String> images = [];
     for (final section in diary.sections) {
-      if(section.imagePath!=null){
+      if (section.imagePath != null) {
         images.add(section.imagePath);
       }
-      if (section.text!=null) {
+      if (section.text != null) {
         title = title == null ? section.text : title;
       }
     }
@@ -48,15 +48,14 @@ class TitleCell extends StatelessWidget {
                 color: Colors.red,
                 icon: Icons.delete,
                 onTap: () {
-                  showTextAlert('是否删除该日记？', context,
-                      okClick: () {
-                        Navigator.pop(context);
-                        if(this.onDelete != null){
-                          onDelete();
-                        }
-                      }, cancelClick: () {
-                        Navigator.pop(context);
-                      });
+                  showTextAlert('是否删除该日记？', context, okClick: () {
+                    Navigator.pop(context);
+                    if (this.onDelete != null) {
+                      onDelete();
+                    }
+                  }, cancelClick: () {
+                    Navigator.pop(context);
+                  });
                 },
               ),
             ),
@@ -65,7 +64,7 @@ class TitleCell extends StatelessWidget {
             elevation: 8,
             child: Container(
               width: double.infinity,
-              height: 130,
+              height: 150,
               child: Row(
                 children: <Widget>[
                   Card(
@@ -73,7 +72,11 @@ class TitleCell extends StatelessWidget {
                       height: 120,
                       width: 120,
                       child: images.length == 0
-                          ? Image.asset('assets/images/default.jpg')
+                          ? Icon(
+                              Icons.image,
+                              size: 120,
+                              color: Colors.grey,
+                            )
                           : Image.file(
                               File(imagePath),
                               fit: BoxFit.cover,
@@ -82,7 +85,7 @@ class TitleCell extends StatelessWidget {
                   ),
                   Expanded(
                     child: Container(
-                      height: 130,
+                      height: 150,
                       width: double.infinity,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,

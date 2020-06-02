@@ -11,9 +11,12 @@ import 'package:my_note/widget/diary_detail.dart';
 import 'package:provider/provider.dart';
 
 class DiaryDetailPage extends StatelessWidget with RouteAware {
-  DiaryDetailPage(this.diary);
+
+  DiaryDetailPage(this.diary,{this.showBarButton = true});
 
   final Diary diary;
+
+  final bool showBarButton;
 
   //截取长屏
   GlobalKey rootWidgetKey = GlobalKey();
@@ -38,6 +41,7 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
               appBar: AppBar(
                 centerTitle: true,
                 title: TextField(
+                  enabled: showBarButton,
                   style: Theme.of(context).textTheme.headline1,
                   controller: TextEditingController(
                     text: provider.diary.title,
@@ -49,11 +53,12 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                     diary.setTitle(value);
                     diary.save();
                   },
-                  onEditingComplete: () {
+                  onSubmitted: (value) {
                     homePageProvider.didChange();
+                    print('aa');
                   },
                 ),
-                actions: <Widget>[
+                actions:showBarButton? <Widget>[
                   Container(
                     padding:
                         EdgeInsets.only(left: 5, top: 15, bottom: 15, right: 5),
@@ -89,6 +94,7 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                           style: Theme.of(context).textTheme.button,
                         )),
                   ),
+                ]:<Widget>[
                 ],
               ),
               body: Container(

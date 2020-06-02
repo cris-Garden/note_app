@@ -17,7 +17,10 @@ class CardView extends StatelessWidget {
     this.imageClick,
     this.backClick,
     this.item = 0,
+    this.useLocal = false,
   });
+
+  final bool useLocal;
 
   final int item;
 
@@ -59,7 +62,7 @@ class CardView extends StatelessWidget {
               this.imageClick();
             },
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: 250, minHeight: 200),
+              constraints: BoxConstraints(maxHeight: 300, minHeight: 200),
               child: Container(
                 width: double.infinity,
                 child: hasImage()
@@ -68,10 +71,12 @@ class CardView extends StatelessWidget {
                           topLeft: Radius.circular(5.0),
                           topRight: Radius.circular(5.0),
                         ),
-                        child: Image.file(
-                          File(imagePath ?? ''),
-                          fit: BoxFit.cover,
-                        ),
+                        child: useLocal
+                            ? Image.asset(imagePath)
+                            : Image.file(
+                                File(imagePath ?? ''),
+                                fit: BoxFit.cover,
+                              ),
                       )
                     : Container(
                         child: Icon(
@@ -86,7 +91,7 @@ class CardView extends StatelessWidget {
         : FullScreenView(
             tag: 'cardImage$item',
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: 250, minHeight: 200),
+              constraints: BoxConstraints(maxHeight: 300, minHeight: 200),
               child: Container(
                 width: double.infinity,
                 child: hasImage()
@@ -95,10 +100,12 @@ class CardView extends StatelessWidget {
                           topLeft: Radius.circular(5.0),
                           topRight: Radius.circular(5.0),
                         ),
-                        child: Image.file(
-                          File(imagePath ?? ''),
-                          fit: BoxFit.cover,
-                        ),
+                        child: useLocal
+                            ? Image.asset(imagePath)
+                            : Image.file(
+                                File(imagePath ?? ''),
+                                fit: BoxFit.cover,
+                              ),
                       )
                     : Container(
                         child: Icon(
@@ -111,18 +118,20 @@ class CardView extends StatelessWidget {
             ),
             fullChild: Container(
               width: double.infinity,
-              child:hasImage()
-                  ? Image.file(
-                File(imagePath),
-                fit: BoxFit.cover,
-              )
+              child: hasImage()
+                  ? (useLocal
+                      ? Image.asset(imagePath)
+                      : Image.file(
+                          File(imagePath),
+                          fit: BoxFit.cover,
+                        ))
                   : Container(
-                child: Icon(
-                  Icons.add_photo_alternate,
-                  size: 100,
-                  color: Colors.grey,
-                ),
-              ),
+                      child: Icon(
+                        Icons.add_photo_alternate,
+                        size: 100,
+                        color: Colors.grey,
+                      ),
+                    ),
             ),
           );
 
@@ -156,9 +165,9 @@ class CardView extends StatelessWidget {
     );
 
     return GestureDetector(
-      onTap:(){
+      onTap: () {
         if (enable) provider.setIndex(item);
-        if(backClick != null){
+        if (backClick != null) {
           this.backClick();
         }
       },
