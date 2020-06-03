@@ -26,6 +26,8 @@
 	<string>如果不允许将不能使用插入图片功能。</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>如果不允许将不能使用语音功能。</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>如果不允许将不能使用截取长屏等功能。</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>如果不允许将不能使用插入图片，截取长屏等功能。</string>
 	<key>UIFileSharingEnabled</key>

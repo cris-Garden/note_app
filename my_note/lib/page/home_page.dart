@@ -124,7 +124,11 @@ class HomePage extends StatelessWidget {
                   return SingleChildScrollView(
                     child: RepaintBoundary(
                         key: rootWidgetKey,
-                        child: Container(
+                        child:widgets.length == 0?Container(
+                          color: Theme.of(context).primaryColor,
+                          width: double.infinity,
+                          height: 500,
+                        ):Container(
                           color: Theme.of(context).primaryColor,
                           child: Column(children: widgets),
                         )),

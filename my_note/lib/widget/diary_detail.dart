@@ -30,10 +30,10 @@ class DiaryDetailWidget extends StatelessWidget {
               : FileUtil().imagePath(diary.fileName, section.imagePath);
           switch (section.type) {
             case SectionType.firstTitle:
-              widgets.add(Container());
+              widgets.add(null);
               break;
             case SectionType.title:
-              widgets.add(Container());
+              widgets.add(null);
               break;
             case SectionType.text:
               widgets.add(Container(
@@ -236,7 +236,11 @@ class DiaryDetailWidget extends StatelessWidget {
               break;
           }
         }
-        return Column(
+        widgets.removeWhere((element) => element == null);
+        return widgets.length == 0 ? Container(
+          width: double.infinity,
+          height: 600,
+        ):Column(
           children: widgets,
         );
       },
