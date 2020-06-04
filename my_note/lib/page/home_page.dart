@@ -80,6 +80,7 @@ class HomePage extends StatelessWidget {
                 child: Icon(Icons.add),
               ),
               body: Container(
+                color: Theme.of(context).primaryColor,
                 child: Selector<HomePageProvider, bool>(
                     builder: (context, didChange, child) {
                   final keys = provider.diaryTimeMap.keys.toList()

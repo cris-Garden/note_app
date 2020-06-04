@@ -98,11 +98,12 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                 ],
               ),
               body: Container(
+                color:Theme.of(context).backgroundColor,
                 child: Column(children: <Widget>[
                   provider.isEditing
                       ? Container(
                           width: double.infinity,
-                          color: Colors.grey,
+                          color: Theme.of(context).primaryColorLight,
                           height: 80,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -174,7 +175,7 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                       child: RepaintBoundary(
                         key: rootWidgetKey,
                         child: Container(
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context).backgroundColor,
                           child: DiaryDetailWidget(),
                         ),
                       ),

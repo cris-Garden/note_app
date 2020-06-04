@@ -37,17 +37,19 @@ class DiaryDetailWidget extends StatelessWidget {
               break;
             case SectionType.text:
               widgets.add(Container(
+                color: Theme.of(context).backgroundColor,
                 decoration: item == provider.index
                     ? BoxDecoration(
                         border: Border.all(
                             color: Colors.blue, width: 1.5), // 边色与边宽度
                       )
                     : null,
-                padding:
-                    EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 8),
+                margin:
+                    EdgeInsets.only(left: 16, right: 16,),
+                padding: EdgeInsets.only(top: 8,bottom: 8),
                 child: TextField(
                   style: Theme.of(context).textTheme.bodyText1,
-//                  autofocus: item == provider.index,
+                  autofocus: item == provider.index,
                   enabled: provider.isEditing,
                   controller: TextEditingController(
                       text: provider.diary.sections[item].text),
