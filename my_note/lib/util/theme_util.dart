@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 ThemeData getNormalTheme() {
   final theme = ThemeData.light().copyWith(
     //修改状态栏颜色
-//    brightness: Brightness.dark,
     primaryIconTheme: IconThemeData(color: Colors.black),
     backgroundColor: Colors.white,
-    primaryColor: Color(0xFFEAEAEA),
+    scaffoldBackgroundColor: Color(0xFFEAEAEA),
+    primaryColor: Color(0xFFFF9400),
     primaryColorLight: Color(0xFFE0E0E0),
     dialogTheme: DialogTheme(
         titleTextStyle: TextStyle(color: Colors.black),
@@ -23,7 +23,7 @@ ThemeData getNormalTheme() {
           fontSize: 21, fontWeight: FontWeight.w700, color: Colors.black),
       bodyText1: TextStyle(
           height: 1.4,
-          fontSize: 15,
+          fontSize: 17,
           fontWeight: FontWeight.w400,
           color: Colors.black),
       button: TextStyle(
@@ -40,6 +40,8 @@ ThemeData getBlackTheme() {
 
   return theme.copyWith(
     primaryColor: theme.scaffoldBackgroundColor,
+    scaffoldBackgroundColor: Colors.black54,
+    backgroundColor: Colors.black54,
     textTheme: TextTheme(
       headline1: TextStyle(
         fontSize: 22,

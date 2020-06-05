@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_note/model/diary.dart';
+import 'package:my_note/page/base/base_page.dart';
 import 'package:my_note/util/guide_util.dart';
 import 'diary_detail_page.dart';
 
@@ -11,7 +12,7 @@ class SettingPage extends StatelessWidget {
       '使用说明',
     ];
     List<Diary> diarys = [GuideUtil().useDiary, GuideUtil().backUpDiary];
-    return Scaffold(
+    return BasePage(
       appBar: AppBar(
         title: Text(
           '设置',

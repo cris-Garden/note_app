@@ -42,17 +42,15 @@ void showTextAlert(
   );
 }
 
-void showLoading(BuildContext context){
+void showLoading(BuildContext context) {
   _loading = _loading == null ? LoadingDialog(buildContext: context) : _loading;
   _loading.show();
 }
 
-void hideLoading(BuildContext context){
+void hideLoading(BuildContext context) {
   _loading = _loading == null ? LoadingDialog(buildContext: context) : _loading;
   _loading.hide();
 }
-
-
 
 void showSheet(
   BuildContext context,
@@ -69,7 +67,10 @@ void showSheet(
             child: Container(
               alignment: Alignment.center,
               height: 45.0,
-              child: Text(titles[index]),
+              child: Text(
+                titles[index],
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
             ),
             onTap: () {
               if (onClick != null) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:my_note/page/home_page.dart';
 import 'package:my_note/provider/home_page_provider.dart';
@@ -15,11 +16,11 @@ void main() async {
   Provider.debugCheckInvalidValueType = null;
   FileUtil().appDocsDir = await getApplicationDocumentsDirectory();
 
-  GuideUtil().useDiary  = await GuideUtil().getUserDiary();
-  GuideUtil().backUpDiary  = await GuideUtil().getBackUpUseDiary();
+  GuideUtil().useDiary = await GuideUtil().getUserDiary();
+  GuideUtil().backUpDiary = await GuideUtil().getBackUpUseDiary();
 
   //生产环境不显示红色错误界面
-  if(bool.fromEnvironment("dart.vm.product")){
+  if (bool.fromEnvironment("dart.vm.product")) {
     ErrorWidget.builder = (errorDetails) {
       print(errorDetails.toString());
       return Container();
@@ -29,7 +30,7 @@ void main() async {
   runApp(
     MyApp(),
   );
-
+//  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 }
 
 class _MyLocalizationsDelegate extends LocalizationsDelegate<Strings> {
@@ -54,8 +55,6 @@ class _MyLocalizationsDelegate extends LocalizationsDelegate<Strings> {
       }
     }
 
-
-
     return ['en', 'ja', 'ko', 'zh_Hant', 'zh_Hans'].contains(code);
   }
 
@@ -74,20 +73,22 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider<HomePageProvider>(
       create: (_) => HomePageProvider(),
       builder: (context, _) {
-        return MaterialApp(
-          localizationsDelegates: [
-            const _MyLocalizationsDelegate(),
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-          ],
-          supportedLocales: [
-            const Locale('en', ''),
-            const Locale('ja', ''),
-          ],
-          theme: lightTheme,
-          darkTheme:getBlackTheme(),
-          home: HomePage(),
-        );
+        return Material(
+            child: MaterialApp(
+              localizationsDelegates: [
+                const _MyLocalizationsDelegate(),
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+              ],
+              supportedLocales: [
+                const Locale('en', ''),
+                const Locale('ja', ''),
+              ],
+              theme: lightTheme,
+              darkTheme: getBlackTheme(),
+              home: HomePage(),
+            ),
+          );
       },
     );
   }

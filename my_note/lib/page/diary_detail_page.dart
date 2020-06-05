@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:my_note/model/diary.dart';
 import 'package:my_note/model/section.dart';
+import 'package:my_note/page/base/base_page.dart';
 import 'package:my_note/provider/diary_provider.dart';
 import 'package:my_note/provider/home_page_provider.dart';
 import 'package:my_note/util/alert_util.dart';
@@ -37,7 +38,7 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
               homePageProvider.doChange();
               FocusScope.of(context).requestFocus(FocusNode());
             },
-            child: Scaffold(
+            child: BasePage(
               appBar: AppBar(
                 centerTitle: true,
                 title: TextField(

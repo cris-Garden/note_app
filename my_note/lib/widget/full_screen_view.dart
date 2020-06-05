@@ -38,10 +38,13 @@ class _DetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GestureDetector(
-        child: Center(
-          child: Hero(
-            tag: tag,
-            child: child,
+        child: Container(
+          color: Colors.black,
+          child: Center(
+            child: Hero(
+              tag: tag,
+              child: child,
+            ),
           ),
         ),
         onTap: () {

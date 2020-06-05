@@ -9,6 +9,8 @@ import 'package:my_note/widget/title_cell.dart';
 import 'package:provider/provider.dart';
 import 'package:my_note/util/file_util.dart';
 
+import 'base/base_page.dart';
+
 class HomePage extends StatelessWidget {
   //截取长屏
   GlobalKey rootWidgetKey = GlobalKey();
@@ -21,7 +23,8 @@ class HomePage extends StatelessWidget {
       },
       builder: (context, provider, _) {
         return SafeArea(
-          child: Scaffold(
+          top: false,
+          child: BasePage(
               appBar: AppBar(
                 title: Text(
                   '日記',
@@ -80,7 +83,7 @@ class HomePage extends StatelessWidget {
                 child: Icon(Icons.add),
               ),
               body: Container(
-                color: Theme.of(context).primaryColor,
+                color: Theme.of(context).scaffoldBackgroundColor,
                 child: Selector<HomePageProvider, bool>(
                     builder: (context, didChange, child) {
                   final keys = provider.diaryTimeMap.keys.toList()
@@ -126,11 +129,11 @@ class HomePage extends StatelessWidget {
                     child: RepaintBoundary(
                         key: rootWidgetKey,
                         child:widgets.length == 0?Container(
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context).scaffoldBackgroundColor,
                           width: double.infinity,
                           height: 500,
                         ):Container(
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context).scaffoldBackgroundColor,
                           child: Column(children: widgets),
                         )),
                   );
