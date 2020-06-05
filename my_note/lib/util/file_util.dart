@@ -86,4 +86,15 @@ class FileUtil {
     final newFile  = await file.create(recursive: true);
     await newFile.writeAsString(diaryData);
   }
+
+  void delete(){
+    final files = appDocsDir.listSync();
+    for(final file in files){
+      print(file);
+      if(file.path.endsWith('.png')||file.path.endsWith('.PNG')){
+        file.deleteSync();
+      };
+
+    }
+  }
 }

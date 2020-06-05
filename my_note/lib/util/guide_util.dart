@@ -19,14 +19,14 @@ class GuideUtil {
   Future<Diary> getUserDiary() async{
     //初始化使用说明
     //get diary data
-    final diaryData = await rootBundle.loadString('assets/backup.txt');
+    final diaryData = await rootBundle.loadString('assets/use.txt');
     return Diary.initFromString(diaryData)..isLocalDiary = true;
   }
 
   Future<Diary> getBackUpUseDiary() async {
     //初始化使用说明
     //get diary data
-    final diaryData = await rootBundle.loadString('assets/use.txt');
+    final diaryData = await rootBundle.loadString('assets/backup.txt');
     return Diary.initFromString(diaryData)..isLocalDiary = true;
   }
 

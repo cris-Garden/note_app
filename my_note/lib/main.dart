@@ -27,9 +27,17 @@ void main() async {
     };
   }
 
-  runApp(
-    MyApp(),
-  );
+
+  //只支持竖屏
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(
+      MyApp(),
+    );
+    FileUtil().delete();
+  });
+
+
 //  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 }
 

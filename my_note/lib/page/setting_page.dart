@@ -3,15 +3,26 @@ import 'package:my_note/model/diary.dart';
 import 'package:my_note/page/base/base_page.dart';
 import 'package:my_note/util/guide_util.dart';
 import 'diary_detail_page.dart';
+import 'dart:io';
 
 class SettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    List<String> titles = [
-      '如何备份日志',
-      '使用说明',
-    ];
-    List<Diary> diarys = [GuideUtil().useDiary, GuideUtil().backUpDiary];
+    List<String> titles;
+    List<Diary> diarys;
+    if(Platform.isIOS){
+      titles = [
+        '使用说明',
+        '如何备份日志',
+      ];
+      diarys = [GuideUtil().useDiary, GuideUtil().backUpDiary];
+    }else{
+      titles = [
+        '使用说明',
+      ];
+      diarys = [GuideUtil().useDiary];
+    }
+
     return BasePage(
       appBar: AppBar(
         title: Text(
@@ -39,7 +50,7 @@ class SettingPage extends StatelessWidget {
             ),
           );
         },
-        itemCount: 2,
+        itemCount: diarys.length,
       ),
     );
   }
