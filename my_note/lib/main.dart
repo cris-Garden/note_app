@@ -5,6 +5,7 @@ import 'package:my_note/page/home_page.dart';
 import 'package:my_note/provider/home_page_provider.dart';
 import 'package:my_note/util/file_util.dart';
 import 'package:my_note/util/guide_util.dart';
+import 'package:my_note/util/location_util.dart';
 import 'package:my_note/util/theme_util.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -83,14 +84,22 @@ class MyApp extends StatelessWidget {
       builder: (context, _) {
         return Material(
             child: MaterialApp(
+              localeResolutionCallback: (deviceLocale, supportedLocales) {
+                print('deviceLocale: $deviceLocale');
+                LocationUtil().deviceLocal = deviceLocale;
+                return deviceLocale;
+              },
               localizationsDelegates: [
                 const _MyLocalizationsDelegate(),
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,
+                ChineseCupertinoLocalizations.delegate,
               ],
               supportedLocales: [
                 const Locale('en', ''),
                 const Locale('ja', ''),
+                const Locale('zh', 'Hans'), // China
+                const Locale('zh', ''), //China
               ],
               theme: lightTheme,
               darkTheme: getBlackTheme(),

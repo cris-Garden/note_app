@@ -37,16 +37,20 @@ class DiaryDetailWidget extends StatelessWidget {
               break;
             case SectionType.text:
               widgets.add(Container(
-                color: Theme.of(context).backgroundColor,
                 decoration: item == provider.index
                     ? BoxDecoration(
+                        color: Theme.of(context).backgroundColor,
                         border: Border.all(
                             color: Colors.blue, width: 1.5), // 边色与边宽度
                       )
-                    : null,
-                margin:
-                    EdgeInsets.only(left: 16, right: 16,),
-                padding: EdgeInsets.only(top: 8,bottom: 8),
+                    : BoxDecoration(
+                        color: Theme.of(context).backgroundColor,
+                      ),
+                margin: EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                ),
+                padding: EdgeInsets.only(top: 8, bottom: 8),
                 child: TextField(
                   style: Theme.of(context).textTheme.bodyText1,
                   autofocus: item == provider.index,
@@ -239,12 +243,14 @@ class DiaryDetailWidget extends StatelessWidget {
           }
         }
         widgets.removeWhere((element) => element == null);
-        return widgets.length == 0 ? Container(
-          width: double.infinity,
-          height: 600,
-        ):Column(
-          children: widgets,
-        );
+        return widgets.length == 0
+            ? Container(
+                width: double.infinity,
+                height: 600,
+              )
+            : Column(
+                children: widgets,
+              );
       },
     );
   }

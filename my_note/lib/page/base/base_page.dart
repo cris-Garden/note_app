@@ -17,14 +17,10 @@ class BasePage extends StatelessWidget {
 //      //修改状态栏的颜色,苹果顶部状态栏是透明的，如果设置safearea需要把顶部部分去掉
 //      value: !isDarkMode ? darkMode : lightMode,
 //      child:
-      return Material(
-        child: Scaffold(
-
+      return Scaffold(
           appBar: appBar,
           body: body,
           floatingActionButton: floatingActionButton,
-        ),
-      );
-//    );
+        );
   }
 }

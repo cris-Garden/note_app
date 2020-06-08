@@ -1,8 +1,6 @@
 import 'dart:async' show Future;
 import 'package:flutter/services.dart' show ByteData, rootBundle;
 import 'package:my_note/model/diary.dart';
-import 'package:my_note/util/file_util.dart';
-import 'package:my_note/util/user_defaults.dart';
 
 class GuideUtil {
 
