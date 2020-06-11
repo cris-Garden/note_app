@@ -53,7 +53,6 @@ class DiaryDetailWidget extends StatelessWidget {
                 padding: EdgeInsets.only(top: 8, bottom: 8),
                 child: TextField(
                   style: Theme.of(context).textTheme.bodyText1,
-                  autofocus: item == provider.index,
                   enabled: provider.isEditing,
                   controller: TextEditingController(
                       text: provider.diary.sections[item].text),

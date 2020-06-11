@@ -56,6 +56,7 @@ class CardView extends StatelessWidget {
         ? GestureDetector(
             onTap: () {
               if (enable) provider.setIndex(item);
+              FocusScope.of(context).requestFocus(FocusNode());
               if (hasImage()) {
                 return;
               }

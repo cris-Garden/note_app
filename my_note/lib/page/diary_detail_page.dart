@@ -42,7 +42,7 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
               appBar: AppBar(
                 centerTitle: true,
                 title: TextField(
-                  enabled: showBarButton,
+                  enabled: provider.isEditing,
                   style: Theme.of(context).textTheme.headline1,
                   controller: TextEditingController(
                     text: provider.diary.title,
@@ -115,6 +115,7 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                                   size: 40.0,
                                 ),
                                 onTap: () {
+                                  FocusScope.of(context).requestFocus(FocusNode());
                                   showSheet(context, ['文本', '图片','图片靠上卡片','图片靠下卡片'], onClick: (index) {
                                     print(index);
                                     if(index == 1){
