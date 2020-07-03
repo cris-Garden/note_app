@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_note/model/section.dart';
+import 'package:my_note/provider/diary_list_provider.dart';
 import 'package:my_note/provider/diary_provider.dart';
-import 'package:my_note/provider/home_page_provider.dart';
 import 'package:my_note/util/file_util.dart';
 import 'package:my_note/widget/section/card_view.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +17,7 @@ class DiaryDetailWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<DiaryProvider>(context);
-    final homePageProvider = Provider.of<HomePageProvider>(context);
+    final homePageProvider = Provider.of<DiaryListProvider>(context);
     return Selector<DiaryProvider, int>(
       selector: (_, provider) => provider.diary.sections.length,
       builder: (context, count, child) {

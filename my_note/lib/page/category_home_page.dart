@@ -2,24 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:my_note/page/diary_detail_page.dart';
 import 'package:my_note/page/setting_page.dart';
-import 'package:my_note/provider/home_page_provider.dart';
+import 'package:my_note/provider/diary_list_provider.dart';
 import 'package:my_note/util/alert_util.dart';
 import 'package:my_note/util/tool_util.dart';
 import 'package:my_note/widget/title_cell.dart';
 import 'package:provider/provider.dart';
 import 'package:my_note/util/file_util.dart';
-
 import 'base/base_page.dart';
 
-class HomePage extends StatelessWidget {
+class CategoryHomePage extends StatelessWidget {
   //截取长屏
   GlobalKey rootWidgetKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-    return Selector<HomePageProvider, HomePageProvider>(
+    return Selector<DiaryListProvider, DiaryListProvider>(
       shouldRebuild: (pre, next) {
-        return pre.changeFlag;
+        return pre.didChange;
       },
       builder: (context, provider, _) {
         return SafeArea(
@@ -77,14 +76,14 @@ class HomePage extends StatelessWidget {
                       .push(MaterialPageRoute(builder: (context) {
                     return DiaryDetailPage(provider.newDiary());
                   })).then((value) {
-                    provider.didChange();
+                    provider.doChange();
                   });
                 },
                 child: Icon(Icons.add),
               ),
               body: Container(
                 color: Theme.of(context).scaffoldBackgroundColor,
-                child: Selector<HomePageProvider, bool>(
+                child: Selector<DiaryListProvider, bool>(
                     builder: (context, didChange, child) {
                   final keys = provider.diaryTimeMap.keys.toList()
                     ..sort((a, b) {
@@ -118,7 +117,7 @@ class HomePage extends StatelessWidget {
                             final diary = diarys[index];
                             provider.diarys.remove(diary);
                             diary.delete();
-                            provider.didChange();
+                            provider.doChange();
                           },
                         );
                       },
@@ -138,7 +137,7 @@ class HomePage extends StatelessWidget {
                         )),
                   );
                 }, selector: (context, provider) {
-                  return provider.changeFlag;
+                  return provider.didChange;
                 }),
               )),
         );

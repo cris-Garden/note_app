@@ -4,8 +4,8 @@ import 'package:flutter/rendering.dart';
 import 'package:my_note/model/diary.dart';
 import 'package:my_note/model/section.dart';
 import 'package:my_note/page/base/base_page.dart';
+import 'package:my_note/provider/diary_list_provider.dart';
 import 'package:my_note/provider/diary_provider.dart';
-import 'package:my_note/provider/home_page_provider.dart';
 import 'package:my_note/util/alert_util.dart';
 import 'package:my_note/util/file_util.dart';
 import 'package:my_note/widget/diary_detail.dart';
@@ -24,7 +24,7 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    final homePageProvider = Provider.of<HomePageProvider>(context);
+    final homePageProvider = Provider.of<DiaryListProvider>(context);
     return ChangeNotifierProvider(
       create: (_) => DiaryProvider(diary),
       child: Selector<DiaryProvider, DiaryProvider>(
@@ -55,7 +55,7 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                     diary.save();
                   },
                   onSubmitted: (value) {
-                    homePageProvider.didChange();
+                    homePageProvider.doChange();
                     print('aa');
                   },
                 ),
@@ -88,7 +88,7 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                             provider.index = 1000;
                           }
                           provider.changeEditing();
-                          homePageProvider.didChange();
+                          homePageProvider.doChange();
                         },
                         child: Text(
                           provider.isEditing ? '浏览' : '编辑',
@@ -121,7 +121,7 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                                     if(index == 1){
                                       FileUtil().getImage().then((image) {
                                         provider.addImage(image, didSave: () {
-                                          homePageProvider.didChange();
+                                          homePageProvider.doChange();
                                         });
                                       });
                                       return;
@@ -139,7 +139,7 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                                 ),
                                 onTap: () {
                                   provider.up();
-                                  homePageProvider.didChange();
+                                  homePageProvider.doChange();
                                 },
                               ),
                               GestureDetector(
@@ -149,7 +149,7 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                                 ),
                                 onTap: () {
                                   provider.down();
-                                  homePageProvider.didChange();
+                                  homePageProvider.doChange();
                                 },
                               ),
                               GestureDetector(
@@ -161,7 +161,7 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                                   showTextAlert('是否删除选中的图片或文本？', context,
                                       okClick: () {
                                     provider.delete();
-                                    homePageProvider.didChange();
+                                    homePageProvider.doChange();
                                     Navigator.pop(context);
                                   }, cancelClick: () {
                                     Navigator.pop(context);

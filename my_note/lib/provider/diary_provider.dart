@@ -1,12 +1,11 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:my_note/model/diary.dart';
 import 'package:my_note/model/section.dart';
+import 'package:my_note/provider/base/base_provider.dart';
 import 'package:my_note/util/file_util.dart';
 import 'package:my_note/widget/section/card_view.dart';
 
-class DiaryProvider with ChangeNotifier {
-  bool didChange = false;
+class DiaryProvider extends BaseProvider {
 
   bool isEditing = false;
 
