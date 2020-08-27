@@ -1,14 +1,13 @@
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:my_note/model/diary.dart';
 import 'package:my_note/util/file_util.dart';
-import 'package:my_note/provider/base/base_provider.dart';
 
-class DiaryListProvider extends BaseProvider {
-
-  String currentCategoryName = '';
+class HomePageProvider with ChangeNotifier {
+  bool changeFlag = false;
 
   void doChange() {
-    didChange = true;
+    changeFlag = true;
     notifyListeners();
   }
 
@@ -27,6 +26,11 @@ class DiaryListProvider extends BaseProvider {
     diarys.insert(0, diary);
     diary.save();
     return diary;
+  }
+
+  void didChange() {
+    changeFlag = !changeFlag;
+    notifyListeners();
   }
 
   Map<String, List<Diary>> get diaryTimeMap {

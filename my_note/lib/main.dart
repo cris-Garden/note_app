@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:my_note/page/category_list_page.dart';
-import 'package:my_note/provider/category_list_provider.dart';
+import 'package:my_note/page/home_page.dart';
+import 'package:my_note/provider/home_page_provider.dart';
 import 'package:my_note/util/file_util.dart';
 import 'package:my_note/util/guide_util.dart';
 import 'package:my_note/util/location_util.dart';
@@ -27,6 +27,7 @@ void main() async {
       return Container();
     };
   }
+
 
   //只支持竖屏
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
@@ -78,8 +79,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final lightTheme = getNormalTheme();
-    return ChangeNotifierProvider<CategoryProvider>(
-      create: (_) => CategoryProvider(),
+    return ChangeNotifierProvider<HomePageProvider>(
+      create: (_) => HomePageProvider(),
       builder: (context, _) {
         return Material(
             child: MaterialApp(
@@ -102,7 +103,7 @@ class MyApp extends StatelessWidget {
               ],
               theme: lightTheme,
               darkTheme: getBlackTheme(),
-              home: CategoryListPage(),
+              home: HomePage(),
             ),
           );
       },

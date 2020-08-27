@@ -56,51 +56,8 @@ class FileUtil {
     return pathName;
   }
 
-  //获取用户日志的分类
-  List<String> get userDiaryCategory{
+  List<String> get diaryFiles{
     final diaryPath = fileFromDocsDir('diary');
-    final  diaryDirectory = Directory(diaryPath);
-    diaryDirectory.createSync(recursive: true);
-    final subFiles = diaryDirectory.listSync();
-    return List.generate(subFiles.length, (index){
-      final path = p.basenameWithoutExtension(subFiles[index].path);
-      if(path.startsWith('user_')){
-        return path.replaceFirst('user_', '');
-      }
-      return null;
-
-    })..removeWhere((element) => element==null);
-  }
-
-  //获取系统日志的分类下的日志
-  List<String> get systemDiarys{
-    final diaryPath = fileFromDocsDir('diary');
-    final  diaryDirectory = Directory(diaryPath);
-    diaryDirectory.createSync(recursive: true);
-    final subFiles = diaryDirectory.listSync();
-    final file = subFiles.firstWhere((element){
-      final path = p.basenameWithoutExtension(element.path);
-      return path.startsWith('sys_');
-    });
-    final  systemDirectory = Directory(file.path);
-    final systemDiary = systemDirectory.listSync();
-    return List.generate(systemDiary.length, (index){
-      return systemDiary[index].path.endsWith('.txt')?subFiles[index].path:null;
-    })..removeWhere((element) => element==null);
-  }
-
-  List<String> get diaryFiles {
-    final diaryPath = fileFromDocsDir('diary');
-    final  diaryDirectory = Directory(diaryPath);
-    diaryDirectory.createSync(recursive: true);
-    final subFiles = diaryDirectory.listSync();
-    return List.generate(subFiles.length, (index){
-      return subFiles[index].path.endsWith('.txt')?subFiles[index].path:null;
-    })..removeWhere((element) => element==null);
-  }
-
-  List<String> diaryFilesFromDirectory(String fileName) {
-    final diaryPath = fileFromDocsDir('diary/user_$fileName');
     final  diaryDirectory = Directory(diaryPath);
     diaryDirectory.createSync(recursive: true);
     final subFiles = diaryDirectory.listSync();

@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:my_note/provider/diary_provider.dart';
 import 'package:provider/provider.dart';
 import '../full_screen_view.dart';
@@ -51,7 +50,6 @@ class CardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     final provider = Provider.of<DiaryProvider>(context);
     isEditing = provider.index == item;
     final imageV = enable
