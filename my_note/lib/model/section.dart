@@ -123,5 +123,10 @@ enum SectionType {
   title,
   text,
   image,
-  line,
+//  line,
+  topImageCard,
+  bottomImageCard,
+  leftImageCard,
+  rightImageCard,
+
 }

@@ -14,6 +14,7 @@ class FullScreenView extends StatelessWidget {
     return  GestureDetector(
         child: Hero(
           tag: tag,
+          transitionOnUserGestures:true,
           child: child,
         ),
         onTap: () {
@@ -36,12 +37,14 @@ class _DetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('图片'),),
       body: GestureDetector(
-        child: Center(
-          child: Hero(
-            tag: tag,
-            child: child,
+        child: Container(
+          color: Colors.black,
+          child: Center(
+            child: Hero(
+              tag: tag,
+              child: child,
+            ),
           ),
         ),
         onTap: () {

@@ -9,7 +9,11 @@ class Diary {
   static final imagePreString = '#%#!Image_';
   static final titlePreString = '####_';
 
-  Diary({this.path}) {
+  Diary.initFromString(String dataString){
+    parseDataString(dataString);
+  }
+
+  Diary({this.path,}) {
     print(path);
 
     file = File(path);
@@ -48,14 +52,17 @@ class Diary {
         sections.add(Section(text: data, type: SectionType.text));
       }
     } else {
-      //新版本解析适配
-      final mapsList = jsonDecode(dataString) as List;
-      sections = List.generate(mapsList.length, (index) {
-        final map = mapsList[index] as Map;
-        return Section.from(map);
-      });
-      print(sections);
+      parseDataString(dataString);
     }
+  }
+
+  void parseDataString(String dataString) {
+    //新版本解析适配
+    final mapsList = jsonDecode(dataString) as List;
+    sections = List.generate(mapsList.length, (index) {
+      final map = mapsList[index] as Map;
+      return Section.from(map);
+    });
   }
 
   List<Section> sections = [];
@@ -82,9 +89,17 @@ class Diary {
 
   DateTime updateTime;
 
+  bool isLocalDiary = false;
+
   void setTitle(String title) {
-    final section =
-        sections.where((element) => element.type == SectionType.firstTitle) as Section;
+    Section section;
+    section = sections.firstWhere(
+        (element) => element.type == SectionType.firstTitle, orElse: () {
+      section = Section(type: SectionType.firstTitle);
+      sections.insert(0, section);
+      return section;
+    });
+    print(section);
     section.title = title;
   }
 

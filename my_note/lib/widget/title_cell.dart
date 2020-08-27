@@ -1,94 +1,122 @@
 import 'dart:io';
-import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:my_note/model/diary.dart';
-import 'package:my_note/model/section.dart';
+import 'package:my_note/util/alert_util.dart';
 import 'package:my_note/util/file_util.dart';
 
 class TitleCell extends StatelessWidget {
   TitleCell(
     this.diary, {
     this.onTap,
-    this.showTopLine = false,
-    this.showBottomLine = true,
+    this.onDelete,
   });
   final VoidCallback onTap;
+  final VoidCallback onDelete;
   final Diary diary;
-  final bool showTopLine;
-  final bool showBottomLine;
   @override
   Widget build(BuildContext context) {
     String title;
     List<String> images = [];
     for (final section in diary.sections) {
-      if (section.type == SectionType.image) {
+      if (section.imagePath != null) {
         images.add(section.imagePath);
-      } else if (section.type == SectionType.text){
+      }
+      if (section.text != null) {
         title = title == null ? section.text : title;
       }
     }
-    bool hasTitle = title != null && title.length != 0;
+
+    final imageName = images.length > 0 ? images.last : null;
+    final imagePath =
+        FileUtil().fileFromDocsDir('image/${diary.fileName}/$imageName');
 
     return GestureDetector(
       onTap: onTap,
-      child: Card(
-        margin: EdgeInsets.only(left: 16,top: 16,right: 16),
-        elevation: 8,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            showTopLine?Divider(
-              height: 2,
-              indent: 8,
-              color: Colors.grey,
-            ):null,
+      child: Container(
+        margin: EdgeInsets.only(left: 16, top: 16, right: 16),
+        child: Slidable(
+          actionPane: SlidableDrawerActionPane(),
+          //侧滑删除设置
+          secondaryActions: <Widget>[
             Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(8),
-              child: Text(
-                diary.title,
-                style: Theme.of(context).textTheme.headline2,
-                textAlign: TextAlign.left,
+              padding: EdgeInsets.only(top: 5, bottom: 5),
+              child: IconSlideAction(
+                caption: '删除',
+                color: Colors.red,
+                icon: Icons.delete,
+                onTap: () {
+                  showTextAlert('是否删除该日记？', context, okClick: () {
+                    Navigator.pop(context);
+                    if (this.onDelete != null) {
+                      onDelete();
+                    }
+                  }, cancelClick: () {
+                    Navigator.pop(context);
+                  });
+                },
               ),
             ),
-            hasTitle
-                ? Container(
-                    padding: EdgeInsets.all(8),
-                    child: Text(
-                      title,
-                      style: Theme.of(context).textTheme.bodyText1,
-                      maxLines: 8,
+          ],
+          child: Card(
+            elevation: 8,
+            child: Container(
+              width: double.infinity,
+              height: 150,
+              child: Row(
+                children: <Widget>[
+                  Card(
+                    child: Container(
+                      height: 120,
+                      width: 120,
+                      child: images.length == 0
+                          ? Icon(
+                              Icons.image,
+                              size: 120,
+                              color: Colors.grey,
+                            )
+                          : Image.file(
+                              File(imagePath),
+                              fit: BoxFit.cover,
+                            ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      height: 150,
+                      width: double.infinity,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.only(left: 16, top: 8),
+                            child: Text(
+                              diary.title,
+                              style: Theme.of(context).textTheme.headline2,
+                              textAlign: TextAlign.left,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(
+                                left: 16, top: 8, right: 16, bottom: 8),
+                            child: Text(
+                              title ?? '',
+                              style: Theme.of(context).textTheme.bodyText1,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   )
-                : null,
-            images.length > 0
-                ? Container(
-                    padding: const EdgeInsets.all(8),
-                    height: 90,
-                    child: GridView.count(
-                      //滚动方向
-                      scrollDirection: Axis.vertical,
-                      crossAxisCount: 4,
-                      crossAxisSpacing: 10,
-                      children:
-                          List.generate([images.length, 4].reduce(min), (index) {
-                        final imageName = images[index].split('_').last;
-                        final imagePath = FileUtil().fileFromDocsDir(
-                            'image/${diary.fileName}/$imageName');
-                        return Image.file(
-                          File(imagePath),
-                          fit: BoxFit.cover,
-                        );
-                      }),
-                    ))
-                : null,
-            showBottomLine?Divider(
-              height: 2,
-              indent: 8,
-              color: Colors.grey,
-            ):null,
-          ]..removeWhere((element) => element == null),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );
