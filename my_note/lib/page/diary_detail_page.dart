@@ -99,6 +99,7 @@ class DiaryDetailPage extends StatelessWidget with RouteAware {
                 ],
               ),
               body: Container(
+                margin:EdgeInsets.only(bottom: 60.0),
                 color:Theme.of(context).backgroundColor,
                 child: Column(children: <Widget>[
                   provider.isEditing

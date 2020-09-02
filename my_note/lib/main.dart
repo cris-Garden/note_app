@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:my_note/page/home_page.dart';
 import 'package:my_note/provider/home_page_provider.dart';
+import 'package:my_note/util/admod_util.dart';
+import 'package:my_note/util/app_util.dart';
 import 'package:my_note/util/file_util.dart';
 import 'package:my_note/util/guide_util.dart';
 import 'package:my_note/util/location_util.dart';
@@ -19,6 +21,10 @@ void main() async {
 
   GuideUtil().useDiary = await GuideUtil().getUserDiary();
   GuideUtil().backUpDiary = await GuideUtil().getBackUpUseDiary();
+
+  //初始化广告
+  AppUtil().init();
+  AdmodUtil().init();
 
   //生产环境不显示红色错误界面
   if (bool.fromEnvironment("dart.vm.product")) {

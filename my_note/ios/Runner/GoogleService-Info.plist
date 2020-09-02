@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>426034384633-4dab8c26gdlqb0qs9favkr87tb2154tm.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.426034384633-4dab8c26gdlqb0qs9favkr87tb2154tm</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD4p6K3J6464PA5jTMdERDcadAXSgIxviQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>426034384633</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.aiabc.zuji</string>
+	<key>PROJECT_ID</key>
+	<string>mynote-8f829</string>
+	<key>STORAGE_BUCKET</key>
+	<string>mynote-8f829.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:426034384633:ios:1b9f9304c4459581999c28</string>
+	<key>DATABASE_URL</key>
+	<string>https://mynote-8f829.firebaseio.com</string>
+</dict>
+</plist>

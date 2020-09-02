@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:my_note/page/diary_detail_page.dart';
 import 'package:my_note/page/setting_page.dart';
 import 'package:my_note/provider/home_page_provider.dart';
+import 'package:my_note/util/admod_util.dart';
 import 'package:my_note/util/alert_util.dart';
 import 'package:my_note/util/tool_util.dart';
 import 'package:my_note/widget/title_cell.dart';
@@ -17,6 +18,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AdmodUtil().showBottom();
     return Selector<HomePageProvider, HomePageProvider>(
       shouldRebuild: (pre, next) {
         return pre.changeFlag;
@@ -71,18 +73,22 @@ class HomePage extends StatelessWidget {
                   ),
                 ],
               ),
-              floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return DiaryDetailPage(provider.newDiary());
-                  })).then((value) {
-                    provider.didChange();
-                  });
-                },
-                child: Icon(Icons.add),
+              floatingActionButton: Container(
+                margin:EdgeInsets.only(bottom: 60.0),
+                child: FloatingActionButton(
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) {
+                      return DiaryDetailPage(provider.newDiary());
+                    })).then((value) {
+                      provider.didChange();
+                    });
+                  },
+                  child: Icon(Icons.add),
+                ),
               ),
               body: Container(
+                margin:EdgeInsets.only(bottom: 60.0),
                 color: Theme.of(context).scaffoldBackgroundColor,
                 child: Selector<HomePageProvider, bool>(
                     builder: (context, didChange, child) {
