@@ -5,10 +5,14 @@ import 'package:my_note/page/setting_page.dart';
 import 'package:my_note/provider/home_page_provider.dart';
 import 'package:my_note/util/admod_util.dart';
 import 'package:my_note/util/alert_util.dart';
+import 'package:my_note/util/api_util.dart';
+import 'package:my_note/util/app_util.dart';
 import 'package:my_note/util/tool_util.dart';
+import 'package:my_note/util/user_defaults.dart';
 import 'package:my_note/widget/title_cell.dart';
 import 'package:provider/provider.dart';
 import 'package:my_note/util/file_util.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'base/base_page.dart';
 
@@ -18,6 +22,43 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final date = DateTime.now();
+    final dateString = "${date.year}${date.month}${date.day}";
+    UserDefaults().getStringData(UserDefaults.lastShowUpdateAlertTime).then((value){
+      if(value != dateString){
+        ApiUtil.getVersion().then((map) {
+          if (AppUtil.isiOS()) {
+            if (AppUtil().version != map["iOS"]) {
+              showTextAlert(
+                  "发现新的版本，可以下载新版本体验更好的功能。",
+                  context,
+                  ok: "去更新",
+                  cancel: "取消",
+                  okClick: () {
+                    //跳到app store
+                    final url = "https://itunes.apple.com/cn/app/id1525468249";
+                    canLaunch(url).then((value){
+                      if (value) {
+                        launch(url, forceSafariVC: false);
+                      } else {
+                        throw 'Could not launch $url';
+                      }
+                      Navigator.of(context).pop();
+                    });
+                  },
+                  cancelClick: () {
+                    Navigator.of(context).pop();
+                  }
+              );
+              UserDefaults().saveStringData(UserDefaults.lastShowUpdateAlertTime, dateString);
+            }
+          } else {
+            // TODO:Android
+          }
+        });
+
+      }
+    });
     AdmodUtil().showBottom();
     return Selector<HomePageProvider, HomePageProvider>(
       shouldRebuild: (pre, next) {
@@ -60,10 +101,11 @@ class HomePage extends StatelessWidget {
                         EdgeInsets.only(left: 5, top: 15, bottom: 15, right: 5),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return SettingPage();
-                        }));
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) {
+                            return SettingPage();
+                          }),
+                        );
                       },
                       child: Icon(
                         Icons.settings,
@@ -74,21 +116,23 @@ class HomePage extends StatelessWidget {
                 ],
               ),
               floatingActionButton: Container(
-                margin:EdgeInsets.only(bottom: 60.0),
+                margin: EdgeInsets.only(bottom: 60.0),
                 child: FloatingActionButton(
                   onPressed: () {
+                    AdmodUtil().hidden();
                     Navigator.of(context)
                         .push(MaterialPageRoute(builder: (context) {
                       return DiaryDetailPage(provider.newDiary());
                     })).then((value) {
                       provider.didChange();
+                      AdmodUtil().showBottom();
                     });
                   },
                   child: Icon(Icons.add),
                 ),
               ),
               body: Container(
-                margin:EdgeInsets.only(bottom: 60.0),
+                margin: EdgeInsets.only(bottom: 60.0),
                 color: Theme.of(context).scaffoldBackgroundColor,
                 child: Selector<HomePageProvider, bool>(
                     builder: (context, didChange, child) {
@@ -115,10 +159,14 @@ class HomePage extends StatelessWidget {
                         return TitleCell(
                           diarys[index],
                           onTap: () {
-                            Navigator.of(context)
-                                .push(MaterialPageRoute(builder: (context) {
-                              return DiaryDetailPage(diarys[index]);
-                            }));
+                            AdmodUtil().hidden();
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) {
+                                return DiaryDetailPage(diarys[index]);
+                              }),
+                            ).then((value) {
+                              AdmodUtil().showBottom();
+                            });
                           },
                           onDelete: () {
                             final diary = diarys[index];
@@ -134,14 +182,18 @@ class HomePage extends StatelessWidget {
                   return SingleChildScrollView(
                     child: RepaintBoundary(
                         key: rootWidgetKey,
-                        child:widgets.length == 0?Container(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          width: double.infinity,
-                          height: 500,
-                        ):Container(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          child: Column(children: widgets),
-                        )),
+                        child: widgets.length == 0
+                            ? Container(
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor,
+                                width: double.infinity,
+                                height: 500,
+                              )
+                            : Container(
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor,
+                                child: Column(children: widgets),
+                              )),
                   );
                 }, selector: (context, provider) {
                   return provider.changeFlag;
