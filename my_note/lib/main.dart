@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+// import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:my_note/page/home_page.dart';
 import 'package:my_note/provider/home_page_provider.dart';
-import 'package:my_note/util/admod_util.dart';
-import 'package:my_note/util/app_util.dart';
+// import 'package:my_note/util/admod_util.dart';
+// import 'package:my_note/util/app_util.dart';
 import 'package:my_note/util/file_util.dart';
 import 'package:my_note/util/guide_util.dart';
-import 'package:my_note/util/location_util.dart';
+// import 'package:my_note/util/location_util.dart';
 import 'package:my_note/util/theme_util.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -23,8 +23,8 @@ void main() async {
   GuideUtil().backUpDiary = await GuideUtil().getBackUpUseDiary();
 
   //初始化广告
-  AppUtil().init();
-  AdmodUtil().init();
+  // AppUtil().init();
+  // AdmodUtil().init();
 
   //生产环境不显示红色错误界面
   if (bool.fromEnvironment("dart.vm.product")) {
@@ -92,14 +92,14 @@ class MyApp extends StatelessWidget {
             child: MaterialApp(
               localeResolutionCallback: (deviceLocale, supportedLocales) {
                 print('deviceLocale: $deviceLocale');
-                LocationUtil().deviceLocal = deviceLocale;
+                // LocationUtil().deviceLocal = deviceLocale;
                 return deviceLocale;
               },
               localizationsDelegates: [
                 const _MyLocalizationsDelegate(),
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                ChineseCupertinoLocalizations.delegate,
+                // GlobalMaterialLocalizations.delegate,
+                // GlobalWidgetsLocalizations.delegate,
+                // ChineseCupertinoLocalizations.delegate,
               ],
               supportedLocales: [
                 const Locale('en', ''),

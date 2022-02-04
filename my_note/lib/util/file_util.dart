@@ -4,8 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:image_pickers/image_pickers.dart';
+// import 'package:image_pickers/image_pickers.dart';
 import 'package:path/path.dart' as p;
 
 class FileUtil {
@@ -20,8 +19,8 @@ class FileUtil {
   Directory appDocsDir;
 
   Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    return image;
+    // var image = await ImagePickers.pickerPaths();
+    return 'image';
   }
 
   //输入图片名字例：和日志名字：1590655478140.png例：1590638902713
@@ -42,9 +41,9 @@ class FileUtil {
       var image = await boundary.toImage(pixelRatio: 3.0);
       ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
       Uint8List pngBytes = byteData.buffer.asUint8List();
-      String dataImagePath = await ImagePickers.saveByteDataImageToGallery(
-        pngBytes,
-      );
+      // String dataImagePath = await ImagePickers.saveByteDataImageToGallery(
+      //   pngBytes,
+      // );
     } catch (e) {
       print(e);
     }

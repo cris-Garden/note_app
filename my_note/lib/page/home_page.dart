@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:my_note/page/diary_detail_page.dart';
 import 'package:my_note/page/setting_page.dart';
 import 'package:my_note/provider/home_page_provider.dart';
-import 'package:my_note/util/admod_util.dart';
+// import 'package:my_note/util/admod_util.dart';
 import 'package:my_note/util/alert_util.dart';
 import 'package:my_note/util/api_util.dart';
 import 'package:my_note/util/app_util.dart';
@@ -59,7 +59,7 @@ class HomePage extends StatelessWidget {
 
       }
     });
-    AdmodUtil().showBottom();
+    // AdmodUtil().showBottom();
     return Selector<HomePageProvider, HomePageProvider>(
       shouldRebuild: (pre, next) {
         return pre.changeFlag;
@@ -119,13 +119,13 @@ class HomePage extends StatelessWidget {
                 margin: EdgeInsets.only(bottom: 60.0),
                 child: FloatingActionButton(
                   onPressed: () {
-                    AdmodUtil().hidden();
+                    // AdmodUtil().hidden();
                     Navigator.of(context)
                         .push(MaterialPageRoute(builder: (context) {
                       return DiaryDetailPage(provider.newDiary());
                     })).then((value) {
                       provider.didChange();
-                      AdmodUtil().showBottom();
+                      // AdmodUtil().showBottom();
                     });
                   },
                   child: Icon(Icons.add),
@@ -159,13 +159,13 @@ class HomePage extends StatelessWidget {
                         return TitleCell(
                           diarys[index],
                           onTap: () {
-                            AdmodUtil().hidden();
+                            // AdmodUtil().hidden();
                             Navigator.of(context).push(
                               MaterialPageRoute(builder: (context) {
                                 return DiaryDetailPage(diarys[index]);
                               }),
                             ).then((value) {
-                              AdmodUtil().showBottom();
+                              // AdmodUtil().showBottom();
                             });
                           },
                           onDelete: () {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:loading_dialog/loading_dialog.dart';
+// import 'package:loading_dialog/loading_dialog.dart';
 
-LoadingDialog _loading;
+// LoadingDialog _loading;
 
 void showTextAlert(
   String text,
@@ -20,7 +20,7 @@ void showTextAlert(
         content: Text(text),
         actions: <Widget>[
           // ボタン領域
-          FlatButton(
+          TextButton(
             child: Text(cancel ?? 'CANCEL'),
             onPressed: () {
               if (cancelClick != null) {
@@ -28,7 +28,7 @@ void showTextAlert(
               }
             },
           ),
-          FlatButton(
+          TextButton(
             child: Text(ok ?? 'OK'),
             onPressed: () {
               if (okClick != null) {
@@ -43,13 +43,13 @@ void showTextAlert(
 }
 
 void showLoading(BuildContext context) {
-  _loading = _loading == null ? LoadingDialog(buildContext: context) : _loading;
-  _loading.show();
+  // _loading = _loading == null ? LoadingDialog(buildContext: context) : _loading;
+  // _loading.show();
 }
 
 void hideLoading(BuildContext context) {
-  _loading = _loading == null ? LoadingDialog(buildContext: context) : _loading;
-  _loading.hide();
+  // _loading = _loading == null ? LoadingDialog(buildContext: context) : _loading;
+  // _loading.hide();
 }
 
 void showSheet(
